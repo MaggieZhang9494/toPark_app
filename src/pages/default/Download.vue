@@ -4,6 +4,12 @@
 
 <script>
 export default {
-    name: 'Download'
+    name: 'Download',
+    mounted(){
+        this.toDownload()
+    },
+    methods: {
+      toDownload() {}
+    }
 }
 </script>

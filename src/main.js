@@ -3,9 +3,13 @@ import App from './App'
 import router from './router'
 import store from './store/index.js'
 import vueTouch from '@/utils/Touch'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 // import CalUtil from '@/utils/cal/CalendarUtil'
 // import '@/utils/Vconsole.js'
 // import app from '../static/moa.min.js'
+
+Vue.use(ElementUI);
 
 Vue.directive("tap",{
     bind:function(el,binding){
@@ -45,7 +49,6 @@ Vue.directive("longtap",{
 
 Vue.config.productionTip = false
 window.DEBUG = true
-
 new Vue({
     el: '#app',
     router,
@@ -53,12 +56,4 @@ new Vue({
     components: { App },
     template: '<App/>'
 })
-
-if(window.DEBUG){
-
-}else{
-    // CalUtil.init(function (res) {
-    //     console.log('cal util : ', res)
-    // })
-}
 

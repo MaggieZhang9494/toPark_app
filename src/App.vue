@@ -156,7 +156,7 @@ export default {
 <style>
 @import './styles/base.less';
 #app {
-	font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	color: #2c3e50;
