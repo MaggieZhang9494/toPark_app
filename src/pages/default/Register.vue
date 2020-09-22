@@ -7,16 +7,27 @@
         <el-button style="float: right; padding: 3px 0" type="text">Sign In</el-button>
       </div>
       <div class="text item">
-        <el-form :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
-          <el-form-item label="Phone" prop="phone" show-message="false">
+        <el-form class="registerForm" :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
+          <el-form-item label="" class="leftSelect">
+            <el-select v-model="ruleForm.region" placeholder="">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Phone" prop="phone" class="rightInput">
             <el-input v-model="ruleForm.phone"></el-input>
           </el-form-item>
-          <el-form-item label="One Time Password" prop="password" show-message="false">
-            <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">Next step</el-button>
-          </el-form-item>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="One Time Password" prop="password">
+                <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+              </el-form-item></el-col>
+            <el-col :span="12">
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')">Next step</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
       </div>
     </el-card>
@@ -36,7 +47,8 @@ export default {
       labelPosition: 'top',
       ruleForm: {
         phone: '',
-        password: ''
+        password: '',
+        region: []
       },
       rules: {
         phone: [
@@ -67,3 +79,24 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.registerForm{
+  position: relative;
+
+  .leftSelect{
+    width: 80px;
+    position: absolute;
+    top: 28px;
+    left: 0;
+    z-index: 999;
+    .el-input--suffix .el-input__inner{
+      padding-right: 0;
+    }
+    .el-input__icon{
+      display: none;
+    }
+  }
+
+}
+</style>

@@ -10,6 +10,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import '../src/styles/base.less'
 // import Req from '@/utils/Https';
 // import Android from '@/utils/Android'
 export default {

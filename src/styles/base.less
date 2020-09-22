@@ -64,7 +64,22 @@ input:-ms-input-placeholder { /* Internet Explorer 10+ */
 .fade-enter, .fade-leave-to{
     opacity: 0;
 }
-
+// element ui 样式修改
+.el-card{
+  .el-card__header{
+    border-bottom: none;
+  }
+}
+.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+  content: '';
+}
+.el-form-item__error{
+  display: none;
+}
+.el-form-item__label{
+  line-height: inherit;
+}
+// 公用样式
 .commonBgColor{
   background-color: #E9EDEF;
 }
