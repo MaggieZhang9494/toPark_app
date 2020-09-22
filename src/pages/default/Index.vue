@@ -1,53 +1,50 @@
 <template>
   <div id="indexWrap" class="commonBgColor">
-      <el-card class="box-card-pd">
-          <!-- <img src='../../assets/top_icon.png'/> -->
-          <div class="tipsWrap">
-              <div class="tips1">ToPark</div>
-              <div class="tips2">Control in your hands</div>
-          </div>
-          <el-divider></el-divider>
-          <div class="tipsContent">
-              <el-row>
-                  <el-col :span="3">
-                      <Icon color="#50CEC3" name="orders-o" />
-                  </el-col>
-                  <el-col :span="21">
-                      <div>What’s this about?</div>
-                      <div>
-                          You have been granted a temporary access to a ToPark
-                          community.
-                      </div>
-                  </el-col>
-              </el-row>
-              <el-row>
-                  <el-col :span="3">
-                      <Icon color="#50CEC3" name="gem-o" />
-                  </el-col>
-                  <el-col :span="21">
-                      <div>Using ToPark is easy and free!</div>
-                      <div>
-                          1. Complete registration 2. Click the “Quick Access”
-                          or download ToPark app.
-                      </div>
-                  </el-col>
-              </el-row>
-              <el-row>
-                  <el-col :span="3">
-                      <Icon color="#50CEC3" name="good-job-o" />
-                  </el-col>
-                  <el-col :span="21">
-                      <div>
-                          That’s it! ToPark makes access a breeze with your
-                          smartphone.
-                      </div>
-                  </el-col>
-              </el-row>
-              <el-button type="primary" round @click="toRegister"
-                  >Self Registration</el-button
-              >
-          </div>
-      </el-card>
+    <el-card class="box-card-pd">
+      <!-- <img src='../../assets/top_icon.png'/> -->
+      <div class="tipsWrap">
+          <div class="tips1">ToPark</div>
+          <div class="tips2">Control in your hands</div>
+      </div>
+      <el-divider></el-divider>
+      <div class="tipsContent">
+        <el-row>
+          <el-col :span="3">
+            <Icon color="#50CEC3" name="orders-o" />
+          </el-col>
+          <el-col :span="21">
+            <div>What’s this about?</div>
+            <div>
+              You have been granted a temporary access to a ToPark community.
+            </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="3">
+            <Icon color="#50CEC3" name="gem-o" />
+          </el-col>
+          <el-col :span="21">
+            <div>Using ToPark is easy and free!</div>
+            <div>
+              1. Complete registration 2. Click the “Quick Access” or download ToPark app.
+            </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="3">
+            <Icon color="#50CEC3" name="good-job-o" />
+          </el-col>
+          <el-col :span="21">
+            <div>
+              That’s it! ToPark makes access a breeze with your smartphone.
+            </div>
+          </el-col>
+        </el-row>
+        <el-button type="primary" round @click="toRegister">
+          Self Registration
+        </el-button>
+      </div>
+    </el-card>
   </div>
 </template>
 
