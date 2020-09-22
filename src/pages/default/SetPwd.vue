@@ -1,25 +1,27 @@
 <template>
-  <div>
+  <div class="setPwdWrap">
     <login-tips />
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>Set Password</span>
+        <span style="font-size:24px">Set Password</span>
       </div>
       <div class="text item">
-        <el-form :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
+        <el-form class="setPwdForm" :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
           <el-form-item label="Password" prop="pass">
-            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+            <el-input type="password" v-model="ruleForm.pass" autocomplete="off"
+            show-password></el-input>
           </el-form-item>
           <el-form-item label="Confirm Password" prop="checkPass">
-            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"
+            show-password></el-input>
           </el-form-item>
-          <el-form-item label="" prop="agree">
+          <el-form-item label="" prop="agree" class="agreeTips">
             <el-checkbox v-model="ruleForm.checked">
-              I have read and accepted the TERMS OF USE and PRIVACY POLICY
+              I have read and accepted the <span class="agreeBlue">TERMS OF USE</span> and <span class="agreeBlue">PRIVACY POLICY</span>
             </el-checkbox>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">Sing Up</el-button>
+            <el-button style="width:100%" type="primary" @click="submitForm('ruleForm')">Sing Up</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -60,6 +62,7 @@ export default {
       }
     };
     return {
+      labelPosition: 'top',
       ruleForm: {
         pass: '',
         checkPass: '',
@@ -95,3 +98,44 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.setPwdWrap{
+  display: flex;
+  flex-direction: column;
+  .el-card{
+    margin: 15px 18px;
+    .el-card__header{
+      padding-bottom: 0;
+    }
+    .el-card__body{
+      padding: 15px 20px;
+    }
+    .setPwdForm{
+      .el-checkbox__inner{
+        border-radius: 50%;
+      }
+      .el-checkbox__input.is-checked+.el-checkbox__label{
+        color: #9B9B9B;
+      }
+      .el-checkbox{
+        color: #9B9B9B;
+        display: flex;
+        .el-checkbox__input{
+          margin-top: 3px;
+        }
+      }
+      .agreeTips{
+        font-size: 12px;
+        .agreeBlue{
+          font-size: 14px;
+          color: #50CEC3;
+        }
+        .el-checkbox__label{
+          white-space: initial;
+        }
+      }
+    }
+  }
+}
+</style>

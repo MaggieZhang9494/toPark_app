@@ -6,8 +6,9 @@
       @click="onClickLeft"
     >
     </el-link>
-    <div class="tips">Glad to meet you!</div>
-    <div>Sign up and get started.</div>
+    <div class="comLogTips1">Glad to!</div>
+    <div class="comLogTips1">meet you</div>
+    <div class="comLogTips2">Sign up and get started.</div>
   </div>
 </template>
 
@@ -23,5 +24,20 @@ export default {
 </script>
 
 <style lang="less">
-
+.comLogTips1 {
+  font-size: 48px;
+  font-family: Montserrat;
+  font-weight: 700;
+  line-height: 58px;
+  color: #202E37;
+  padding-left: 25px;
+}
+.comLogTips2 {
+  font-size: 22px;
+  font-family: Montserrat;
+  font-weight: 580;
+  line-height: 27px;
+  color: #202E37;
+  padding: 10px 0 5px 25px;
+}
 </style>

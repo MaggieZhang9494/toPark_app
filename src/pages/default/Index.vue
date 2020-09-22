@@ -1,7 +1,7 @@
 <template>
   <div id="indexWrap" class="commonBgColor">
     <el-card class="box-card-pd">
-      <!-- <img src='../../assets/top_icon.png'/> -->
+      <img src='../../assets/top_icon.png'/>
       <div class="tipsWrap">
           <div class="tips1">ToPark</div>
           <div class="tips2">Control in your hands</div>
@@ -26,7 +26,7 @@
           <el-col :span="21">
             <div>Using ToPark is easy and free!</div>
             <div>
-              1. Complete registration 2. Click the “Quick Access” or download ToPark app.
+              1. Complete registration 2. Click the "Quick Access" or download ToPark app.
             </div>
           </el-col>
         </el-row>
@@ -36,8 +36,9 @@
           </el-col>
           <el-col :span="21">
             <div>
-              That’s it! ToPark makes access a breeze with your smartphone.
+              That's it! ToPark makes access a breeze with your smartphone.
             </div>
+            <div></div>
           </el-col>
         </el-row>
         <el-button type="primary" round @click="toRegister">
@@ -169,10 +170,30 @@ export default {
       text-align: left;
       .el-row {
         padding-bottom: 10px;
+        
+        .el-col-3 { 
+          text-align: right;
+          padding-right: 10px;
+        }
         .el-col-21 {
           div {
             &:first-child {
               line-height: 1;
+              height: 18px;
+              font-size: 14px;
+              font-family: Montserrat;
+              font-weight: 600;
+              line-height: 18px;
+              color: #707070;
+              padding-bottom: 10px;
+            }
+            &:last-child {
+              height: 46px;
+              font-size: 12px;
+              font-family: SFUIDisplay-Regular;
+              font-weight: 400;
+              line-height: 16px;
+              color: #9B9B9B;
             }
           }
         }

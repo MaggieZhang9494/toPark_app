@@ -1,51 +1,137 @@
 <template>
-  <div>
+  <div class="updateInfoWrap">
     <NavBar
       left-arrow
       @click-left="onClickLeft"
     />
-    <div>
+    <div class="tips">
       Please improve the person's information so that we can better help you
     </div>
-    <CellGroup>
-      <Cell title="Avatar Setting">
-        <template #right-icon>
-          <img src="../../assets/top_icon.png"/>
-          <Icon name="search" class="search=icon" />
+    <Form>
+      <Field name="uploader" label="Avatar Setting" input-align="right"
+      right-icon="arrow">
+        <template #input>
+          <Uploader v-model="params.avatar" max-count="1"/>
         </template>
-      </Cell>
-      <!-- <Cell title="" value="内容" is-link/> -->
-      <Cell title="Salutation" value="内容" />
-      <Cell title="First Name" value="内容" />
-      <Cell title="Last Name" value="内容" />
-      <Cell title="Date Of Birth" value="内容" is-link/>
-      <Cell title="Gender" value="内容" is-link/>
-      <Cell title="Email" value="内容" />
-    </CellGroup>
-    <Button color="#7232dd" type="primary" round block @click="toUpdate">Update</Button>
+      </Field>
+      <Field
+        readonly
+        clickable 
+        input-align="right"
+        name="Salutation"
+        right-icon="arrow"
+        :value="params.salutation"
+        label="Salutation"
+        placeholder="please enter Salutation"
+        @click="showSalutation = true"
+      />
+      <Field
+        v-model="params.firstName"
+        name="FirstName"
+        input-align="right"
+        label="First Name"
+        placeholder="please enter First Name"
+      />
+      <Field
+        v-model="params.lastName"
+        name="LastName"
+        label="Last Name"
+        input-align="right"
+        placeholder="please enter Last Name"
+      />
+      <Field
+        readonly
+        clickable
+        name="Birth"
+        :value="params.birth"
+        right-icon="arrow"
+        label="Date Of Birth"
+        input-align="right"
+        placeholder="please select Date"
+        @click="showCalendar = true"
+      />
+      <Field
+        readonly
+        clickable
+        name="Gender"
+        :value="params.gender"
+        label="Gender"
+        right-icon="arrow"
+        input-align="right"
+        placeholder="please enter Gender"
+        @click="showGender = true"
+      />
+      <Field
+        v-model="params.email"
+        name="Email"
+        label="Email"
+        input-align="right"
+        placeholder="please enter Email"
+      />
+    </Form>
+    <Button style="margin: 22px;width: auto;" color="#50CEC3" type="primary" round block @click="toUpdate">Update</Button>
+    <Popup v-model="showSalutation" position="bottom">
+      <Area
+        :area-list="areaList"
+        @confirm="onConfirmSalutation"
+        @cancel="showSalutation = false"
+      />
+    </Popup>
+    <Popup v-model="showGender" position="bottom">
+      <Area
+        :area-list="areaList"
+        @confirm="onConfirmGender"
+        @cancel="showGender = false"
+      />
+    </Popup>
+    <Calendar v-model="showCalendar" @confirm="onConfirmCalendar" />
   </div>
 </template>
 
 <script>
-import { NavBar, Cell, CellGroup, Button, Icon } from 'vant'
+import { NavBar, Uploader, Popup, Area, Button, Icon, Form, Field, Calendar  } from 'vant'
 export default {
   name: 'UpdateInfo',
   components: {
     NavBar,
-    Cell,
-    CellGroup,
+    Uploader,
+    Popup,
+    Area,
     Button,
-    Icon
+    Icon,
+    Form,
+    Field,
+    Calendar
   },
   data() {
     return {
       params: {
-        phone: '',
-        password: ''
+        salutation: '',
+        firstName: '',
+        lastName: '',
+        avatar: [{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }],
+        birth: '',
+        email: ''
       },
+      showSalutation: false,
+      showGender: false,
+      areaList: {}, // 数据格式见 Area 组件文档
+      showCalendar: false,
     }
   },
   methods: {
+    onConfirmSalutation(values) {
+      this.value = values.map((item) => item.name).join('/');
+      this.showSalutation = false;
+    },
+    onConfirmCalendar(date) {
+      this.value = `${date.getMonth() + 1}/${date.getDate()}`;
+      this.showCalendar = false;
+    },
+    onConfirmGender(values) {
+      this.value = values.map((item) => item.name).join('/');
+      this.showGender = false;
+    },
     onClickLeft() {
       this.$router.go(-1)
     },
@@ -55,3 +141,50 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.updateInfoWrap{
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  .van-nav-bar{
+    height: 16px;
+    color: #747577;
+    padding-top: 5px;
+    padding-left: 5px;
+    font-size: 16px;
+    .van-icon{
+      color: #747577;
+    }
+  }
+  .tips{
+    height: 32px;
+    font-size: 14px;
+    font-family: SFUIDisplay-Regular;
+    font-weight: 400;
+    line-height: 16px;
+    color: #707070;
+    padding: 15px 22px 8px;
+    opacity: 0.62;
+  }
+  .van-cell{
+    padding: 12px 22px;
+    align-items:center;
+    .van-field__label{
+      width: 8em;
+      font-size: 16px;
+      font-family: Montserrat;
+      font-weight: 600;
+      line-height: 22px;
+      color: #343434;
+    }
+    .van-field__control{
+      font-size: 14px;
+      font-family: SFUIDisplay-Regular;
+      font-weight: 400;
+      line-height: 16px;
+      color: #CDCDCD;
+    }
+  }
+}
+</style>

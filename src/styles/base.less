@@ -38,7 +38,7 @@ input:-ms-input-placeholder { /* Internet Explorer 10+ */
 	transition-property: transform,opacity;
 	transition-duration: 0.3s;
 	transition-timing-function: ease-out;
-	background-color: #ffffff;
+	background-color: #E9EDEF;
 	display: flex;
 	flex-direction: column;
 }
@@ -65,26 +65,50 @@ input:-ms-input-placeholder { /* Internet Explorer 10+ */
     opacity: 0;
 }
 // element ui 样式修改
+// 去掉card底边框
 .el-card{
   .el-card__header{
     border-bottom: none;
   }
 }
+// form-require hide
 .el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
-  content: '';
+  content: '' !important;
 }
+// form-error-tips hide
 .el-form-item__error{
   display: none;
 }
+// 设置form-label行高
 .el-form-item__label{
   line-height: inherit;
+}
+// 设置分割线透明度
+.el-divider{
+  opacity: .57;
+}
+// 头部返回按钮
+.el-link.el-link--default{
+  height: 16px;
+  color: #747577;
+  padding-top: 5px;
+  padding-left: 5px;
+  font-size: 16px;
+}
+// form-label
+.el-form--label-top .el-form-item__label{
+  font-size: 15px;
+  font-family: SFUIDisplay-Regular;
+  line-height: 18px;
+  padding-bottom: 5px;
+  color: #9B9B9B;
 }
 // 公用样式
 .commonBgColor{
   background-color: #E9EDEF;
 }
 .box-card-pd{
-  margin: 15px 22px;
+  margin: 15px 18px;
   text-align: center;
 }
 
