@@ -7,6 +7,7 @@ import SetPwd from '@/pages/default/SetPwd'
 import UpdateInfo from '@/pages/default/UpdateInfo'
 import RegisterResult from '@/pages/default/RegisterResult'
 import ScanCode from '@/pages/default/ScanCode'
+import GateTips from '@/pages/access/GateTips'
 
 Vue.use(Router)
 
@@ -60,6 +61,11 @@ export default new Router({
 			component: ScanCode,
 			meta: {index: 7}
     },
-    
+    {
+			path: '/gateTips',
+			name: 'GateTips',
+			component: GateTips,
+			meta: {index: 8}
+    }
 	]
 })

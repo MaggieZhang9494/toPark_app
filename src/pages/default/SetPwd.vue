@@ -1,6 +1,6 @@
 <template>
   <div class="setPwdWrap">
-    <login-tips />
+    <login-tips :tipsType="true"/>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span style="font-size:24px">Set Password</span>
@@ -21,7 +21,7 @@
             </el-checkbox>
           </el-form-item>
           <el-form-item>
-            <el-button style="width:100%" type="primary" @click="submitForm('ruleForm')">Sing Up</el-button>
+            <el-button round style="width:100%" type="primary" @click="submitForm('ruleForm')">Sing Up</el-button>
           </el-form-item>
         </el-form>
       </div>

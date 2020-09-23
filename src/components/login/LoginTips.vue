@@ -6,9 +6,16 @@
       @click="onClickLeft"
     >
     </el-link>
-    <div class="comLogTips1">Glad to!</div>
-    <div class="comLogTips1">meet you</div>
-    <div class="comLogTips2">Sign up and get started.</div>
+    <div v-show="tipsType">
+      <div class="comLogTips1">Glad to!</div>
+      <div class="comLogTips1">meet you</div>
+      <div class="comLogTips2">Sign up and get started.</div>
+    </div>
+    <div v-show="!tipsType">
+      <div class="comLogTips1">Welcome</div>
+      <div class="comLogTips1">back.</div>
+      <div class="comLogTips2">How have you been?</div>
+    </div>
   </div>
 </template>
 
@@ -19,6 +26,15 @@ export default {
     onClickLeft() {
       this.$router.go(-1)
     }
+  },
+  props: {
+    tipsType: {
+        type: Boolean,
+        default: () => {
+            // return true
+        }
+    }
+
   }
 }
 </script>

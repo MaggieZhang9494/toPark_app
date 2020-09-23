@@ -1,6 +1,6 @@
 <template>
   <div class="registerWrap">
-    <login-tips />
+    <login-tips :tipsType="true"/>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span style="font-size:24px">Sign Up</span>
@@ -102,12 +102,13 @@ export default {
       position: relative;
 
       .leftSelect{
-        width: 72px;
+        width: 70px;
         position: absolute;
         top: 29px;
-        left: 1px;
+        left: 10px;
         z-index: 999;
         background-color: #E9EDEF;
+        border-radius: 40px;
         .el-input--suffix .el-input__inner{
           padding-right: 0;
         }
@@ -131,7 +132,7 @@ export default {
 
       .rightInput{
         .el-input__inner{
-          padding-left: 80px;
+          padding-left: 85px;
         }
       }
 

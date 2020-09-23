@@ -20,7 +20,7 @@
         input-align="right"
         name="Salutation"
         right-icon="arrow"
-        :value="params.salutation"
+        :value="salutationText"
         label="Salutation"
         placeholder="please enter Salutation"
         @click="showSalutation = true"
@@ -54,7 +54,7 @@
         readonly
         clickable
         name="Gender"
-        :value="params.gender"
+        :value="genderText"
         label="Gender"
         right-icon="arrow"
         input-align="right"
@@ -69,17 +69,19 @@
         placeholder="please enter Email"
       />
     </Form>
-    <Button style="margin: 22px;width: auto;" color="#50CEC3" type="primary" round block @click="toUpdate">Update</Button>
+    <Button style="margin: 22px;width: auto;font-size:16px" color="#50CEC3" type="primary" round block @click="toUpdate">Update</Button>
     <Popup v-model="showSalutation" position="bottom">
-      <Area
-        :area-list="areaList"
+      <Picker
+        show-toolbar
+        :columns="columnsSalutation"
         @confirm="onConfirmSalutation"
         @cancel="showSalutation = false"
       />
     </Popup>
     <Popup v-model="showGender" position="bottom">
-      <Area
-        :area-list="areaList"
+      <Picker
+        show-toolbar
+        :columns="columnsGender"
         @confirm="onConfirmGender"
         @cancel="showGender = false"
       />
@@ -89,14 +91,14 @@
 </template>
 
 <script>
-import { NavBar, Uploader, Popup, Area, Button, Icon, Form, Field, Calendar  } from 'vant'
+import { NavBar, Uploader, Popup, Picker, Button, Icon, Form, Field, Calendar  } from 'vant'
 export default {
   name: 'UpdateInfo',
   components: {
     NavBar,
     Uploader,
     Popup,
-    Area,
+    Picker,
     Button,
     Icon,
     Form,
@@ -111,17 +113,23 @@ export default {
         lastName: '',
         avatar: [{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }],
         birth: '',
-        email: ''
+        email: '',
+        gender: ''
       },
+      salutationText: '',
+      genderText: '',
       showSalutation: false,
       showGender: false,
-      areaList: {}, // 数据格式见 Area 组件文档
+      columnsSalutation: [{text:'Mr',code:1},{text:'Miss',code:2}],
+      columnsGender: [{text:'male',code:1},{text:'female',code:2}],
       showCalendar: false,
     }
   },
   methods: {
     onConfirmSalutation(values) {
-      this.value = values.map((item) => item.name).join('/');
+      console.log("values",values)
+      this.params.salutation = values.code;
+      this.salutationText = values.text;
       this.showSalutation = false;
     },
     onConfirmCalendar(date) {
@@ -129,7 +137,8 @@ export default {
       this.showCalendar = false;
     },
     onConfirmGender(values) {
-      this.value = values.map((item) => item.name).join('/');
+      this.params.gender = values.code;
+      this.genderText = values.text;
       this.showGender = false;
     },
     onClickLeft() {
@@ -147,8 +156,10 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  .van-hairline--bottom::after{
+    border-bottom-width: 0;
+  }
   .van-nav-bar{
-    height: 16px;
     color: #747577;
     padding-top: 5px;
     padding-left: 5px;

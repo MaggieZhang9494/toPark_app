@@ -6,9 +6,7 @@ import vueTouch from '@/utils/Touch'
 import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 import "@/theme/index.css";
-// import CalUtil from '@/utils/cal/CalendarUtil'
 // import '@/utils/Vconsole.js'
-// import app from '../static/moa.min.js'
 
 Vue.use(ElementUI);
 
