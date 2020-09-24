@@ -28,6 +28,8 @@
             text="Swipe to open  >>"
             handlerIcon="el-icon-lock"
             successIcon="el-icon-unlock"/>
+            <!-- <el-button type="primary" round style="width:100%;margin-top:15px;" icon="el-icon-loading"></el-button> -->
+            <el-button type="primary" round style="width:100%;margin-top:15px;" icon="el-icon-unlock"></el-button>
         </div>
       </div>
     </div>
