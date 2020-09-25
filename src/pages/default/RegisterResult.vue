@@ -20,7 +20,8 @@
           </div>
       </el-link>
       <el-card class="box-card">
-        <img src="../../assets/top_icon.png"/>
+        <!-- <img src="../../assets/top_icon.png" /> -->
+        <Icon style="padding-top: 50px;padding-bottom: 20px;" name="smile-o" size="70" color="#50CEC3"/>
         <div class="firstTips">Complete</div>
         <div class="firstTips">registration</div>
         <div class="secondTips">Almost there… simply click on Quick Access to scan QR code for access (expire in 10mins) or download ToPark app for a truly contactless entry.</div>
@@ -48,11 +49,12 @@
 </template>
 
 <script>
-import { CountDown } from 'vant'
+import { CountDown,Icon } from 'vant'
 export default {
   name: 'RegisterResult',
   components:{
-    CountDown
+    CountDown,
+    Icon
   },
   data () {
     return {

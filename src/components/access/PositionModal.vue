@@ -4,7 +4,7 @@
       <div class="wrapper" @click.stop>
         <img src="../../assets/gate_modal.png" />
         <el-card class="box-card">
-          <icon class="el-icon-location" />
+          <i class="el-icon-location" />
           <div class="visite1">you are visiting</div>
           <div class="visite2">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
         </el-card>

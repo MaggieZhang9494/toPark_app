@@ -141,6 +141,57 @@ input:-ms-input-placeholder { /* Internet Explorer 10+ */
       }
     }
   }
+
+  .wrapperOverlay{
+    background: #FFFFFF;
+    opacity: 1;
+    margin: 40px 18px 80px;
+    border-radius: 25px;
+    text-align: center;
+    padding: 30px 20px;
+    text-align: left;
+    .headerOverlay{
+      position: relative;
+      margin-bottom: 20px;
+
+      .headerTitle{
+        height: 29px;
+        font-size: 24px;
+        font-family: Montserrat;
+        font-weight: 400;
+        line-height: 29px;
+        color: #343434;
+      }
+      .el-icon-error{    
+        position: absolute;
+        right: 5px;
+        font-size: 20px;
+        color: #d8dfe3;
+        top: 5px;
+      }
+    }
+    .el-upload--picture-card{
+      width: 70px;
+      height: 70px;
+      line-height: 70px;
+      margin-left: 1px;
+    }
+    .el-upload-list--picture-card .el-upload-list__item{
+      width: 70px;
+      height: 70px;
+      line-height: 70px;
+      margin-left: 1px;
+    }
+    .el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+      content: '*' !important;
+    }
+    .el-input__inner{
+      background-color: #fff;
+    }
+  }
+}
+.van-picker__confirm{
+  color: #50CEC3
 }
 // 公用样式
 .commonBgColor{

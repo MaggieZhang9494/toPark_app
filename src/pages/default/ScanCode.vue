@@ -7,7 +7,8 @@
     >
     </el-link>
     <el-card class="box-card">
-      <img src="../../assets/top_icon.png"/>
+      <!-- <img src="../../assets/top_icon.png"/> -->
+      <Icon style="padding-top: 15px;padding-bottom: 20px;" name="scan" size="77" color="#50CEC3"/>
       <div class="scanTips">Scan QR code for access</div>
       <el-button round type="primary" @click="toAccess">Scan It</el-button>
     </el-card>
@@ -15,8 +16,12 @@
 </template>
 
 <script>
+import { Icon } from 'vant'
 export default {
   name: 'ScanCode',
+  components:{
+    Icon
+  },
   methods: {
     onClickLeft() {
       this.$router.go(-1)

@@ -74,6 +74,8 @@
       <Picker
         show-toolbar
         :columns="columnsSalutation"
+        confirm-button-text="Ok"
+        cancel-button-text="cancel"
         @confirm="onConfirmSalutation"
         @cancel="showSalutation = false"
       />
@@ -82,6 +84,8 @@
       <Picker
         show-toolbar
         :columns="columnsGender"
+        confirm-button-text="Ok"
+        cancel-button-text="cancel"
         @confirm="onConfirmGender"
         @cancel="showGender = false"
       />
