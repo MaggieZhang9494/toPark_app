@@ -72,6 +72,12 @@ export default {
           this.$router.push('/setPwd')
         } else {
           console.log('error submit!!');
+         this.$message({
+            message: '恭喜你，这是一条成功消息',
+            type: 'success',
+            showClose: true,
+          });
+          this.$message.error('错了哦，这是一条错误消息');
           return false;
         }
       });
