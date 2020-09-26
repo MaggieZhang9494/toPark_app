@@ -1,32 +1,29 @@
 <template>
-  <div class="registerWrap">
+  <div class="resetPwdWrap">
     <login-tips :tipsType="true"/>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span style="font-size:24px">Sign Up</span>
-        <el-button style="float: right;font-size:14px;color:#cdcdcd;" type="text"
-        @click="toLogin">Sign In</el-button>
+        <span style="font-size:24px">Reset Password</span>
       </div>
       <div class="text item">
         <el-form class="registerForm" :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
-          <el-form-item label="" class="leftSelect">
-            <el-select v-model="ruleForm.CountryCode" placeholder="">
-              <el-option label="+86" value="86"></el-option>
-              <el-option label="+83" value="83"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Phone" prop="MobileNumber" class="rightInput">
-            <el-input v-model="ruleForm.MobileNumber"></el-input>
-          </el-form-item>
           <el-row style="align-items: center;display: flex;">
             <el-col :span="12">
               <el-form-item label="One Time Password" prop="Otp">
-                <el-input type="Otp" v-model="ruleForm.Otp" autocomplete="off"></el-input>
+                <el-input v-model="ruleForm.Otp" autocomplete="off"></el-input>
               </el-form-item></el-col>
             <el-col :span="12">
-              <div class="timeCall">after {{send.times}} seconds</div>
+              <div class="timeCall">after {{time}} seconds</div>
             </el-col>
           </el-row>
+          <el-form-item label="New Password" prop="newPwd">
+            <el-input type="password" v-model="ruleForm.newPwd" autocomplete="off"
+            show-password></el-input>
+          </el-form-item>
+          <el-form-item label="Confirm New Password" prop="confirmPwd">
+            <el-input type="password" v-model="ruleForm.confirmPwd" autocomplete="off"
+            show-password></el-input>
+          </el-form-item>
           <el-form-item>
             <el-button style="width:100%" round type="primary" @click="submitForm('ruleForm')">Next step</el-button>
           </el-form-item>
@@ -42,26 +39,59 @@ import LoginTips from '../../components/login/LoginTips'
 import ruler from '@/utils/ruler.js'
 import { mapActions } from 'vuex'
 export default {
-  name: 'Register',
+  name: 'ResetPwd',
   components: {
     LoginTips
   },
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(''));
+      } else if (value.length < 6) {
+        callback(new Error(''));
+      } else {
+        if (this.ruleForm.checkPass !== '') {
+          this.$refs.ruleForm.validateField('checkPass');
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value.length < 6) {
+        callback(new Error(''));
+      }  else if (value !== this.ruleForm.pass) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    };
     return {
       labelPosition: 'top',
+      time: 59,
       ruleForm: {
-        MobileNumber: '13555555555',
-        Otp: '999999',
-        Password:'123456',
-        CountryCode: '86'
+        Opt: '',
+        newPwd: '',
+        confirmPwd: '',
+        MobileNumber:'',
+        CountryCode:''
       },
       rules: {
-        MobileNumber: [
-          { required: true, message: '', trigger: 'blur' }
+        newPwd: [
+          { required: true, message: '', trigger: 'blur' },
+          { min: 6, max: 20, message: '', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' }
         ],
-        Otp: [
-          { required: true, message: '', trigger: 'blur' }
-        ]
+        confirmPwd: [
+          { required: true, message: '', trigger: 'blur' },
+          { min: 6, max: 20, message: '', trigger: 'blur' },
+          { validator: validatePass2, trigger: 'blur' }
+        ],
+        Opt: [
+          { required: true, message: '', trigger: 'blur' },
+          { min: 6, max: 6, message: '', trigger: 'blur' },
+        ],
       },
       send: {
         status: false,
@@ -70,23 +100,15 @@ export default {
       resetTime:false,
     };
   },
-  computed: {
-    newMobileNumber() {
-      return this.ruleForm.MobileNumber;
-    }
-  },
-  watch: {
-    newMobileNumber(val) {
-      if(ruler.mobile.test(this.ruleForm.MobileNumber)){
-        this.resetTime= false
-        this.sendSms()
-      }else{
-        this.resetTime= true
-      }
-    }
+  mounted() {
+    let resetInfo= JSON.parse(sessionStorage.getItem('ResetInfo'))
+    this.ruleForm.MobileNumber= resetInfo.MobileNumber
+    this.ruleForm.CountryCode= resetInfo.CountryCode
+    this.resetTime= false
+    this.sendSms()
   },
   methods: {
-    ...mapActions(["handleRegister"]),
+    ...mapActions(["handleResetPassword"]),
     sendSms: function(){
       console.log(1)
       this.onTimeChange()
@@ -122,30 +144,20 @@ export default {
         }
         console.log(2)
       },1000)
-  },
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.handleSubmit()
-        //  this.$message({
-        //     message: '恭喜你，这是一条成功消息',
-        //     type: 'success',
-        //     showClose: true,
-        //     duration:60000,
-        //     offset: 60
-        //   });
-          // this.$message.error('错了哦，这是一条错误消息');
         } else {
           console.log('error submit!!');
-         this.$message({
-            message: '恭喜你，这是一条成功消息',
-            type: 'success',
-            showClose: true,
-            duration:60000,
-            offset: 60
-          });
-          // this.$message.error('错了哦，这是一条错误消息');
-          return false;
+          this.$message({
+              message: '恭喜你，这是一条成功消息',
+              type: 'success',
+              showClose: true,
+            });
+            this.$message.error('错了哦，这是一条错误消息');
+            return false;
         }
       });
     },
@@ -154,9 +166,10 @@ export default {
       let ruleParams=this.ruleForm
       let finalParams={ ...phoneParams, ...ruleParams}
       console.log("finalParams",finalParams)
-      this.handleRegister(finalParams).then(
+      this.handleResetPassword(finalParams).then(
         res => {
           console.log("success",res)
+          // this.$router.push('/updateInfo')
         },
         res => {
           console.log("err",res)
@@ -165,16 +178,13 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    },
-    toLogin(formName) {
-      this.$router.push('/login')
     }
   }
 }
 </script>
 
 <style lang="less">
-.registerWrap{
+.resetPwdWrap{
   display: flex;
   flex-direction: column;
   .el-card{

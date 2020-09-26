@@ -32,6 +32,8 @@
 <script>
 // 密码不一致，密码少于6位，号码已注册
 import LoginTips from '../../components/login/LoginTips'
+import ruler from '@/utils/ruler.js'
+import { mapActions } from 'vuex'
 export default {
   name: 'SetPwd',
   components: {
@@ -81,16 +83,31 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["handleSetPassword"]),
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
-          this.$router.push('/updateInfo')
+          this.handleSubmit()
         } else {
           console.log('error submit!!');
           return false;
         }
       });
+    },
+    handleSubmit(){
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let ruleParams=this.ruleForm
+      let finalParams={ ...phoneParams, ...ruleParams}
+      console.log("finalParams",finalParams)
+      this.handleSetPassword(finalParams).then(
+        res => {
+          console.log("success",res)
+          // this.$router.push('/updateInfo')
+        },
+        res => {
+          console.log("err",res)
+        }
+      );
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

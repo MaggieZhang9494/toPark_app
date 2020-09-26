@@ -11,7 +11,7 @@
       <Field name="uploader" label="Avatar Setting" input-align="right"
       right-icon="arrow">
         <template #input>
-          <Uploader v-model="params.avatar" max-count="1"/>
+          <Uploader v-model="params.Avatar" max-count="1" :after-read="afterRead" />
         </template>
       </Field>
       <Field
@@ -20,20 +20,20 @@
         input-align="right"
         name="Salutation"
         right-icon="arrow"
-        :value="salutationText"
+        :value="params.Salutation"
         label="Salutation"
         placeholder="please enter Salutation"
         @click="showSalutation = true"
       />
       <Field
-        v-model="params.firstName"
+        v-model="params.FirstName"
         name="FirstName"
         input-align="right"
         label="First Name"
         placeholder="please enter First Name"
       />
       <Field
-        v-model="params.lastName"
+        v-model="params.LastName"
         name="LastName"
         label="Last Name"
         input-align="right"
@@ -43,7 +43,7 @@
         readonly
         clickable
         name="Birth"
-        :value="params.birth"
+        :value="params.Birthday"
         right-icon="arrow"
         label="Date Of Birth"
         input-align="right"
@@ -54,7 +54,7 @@
         readonly
         clickable
         name="Gender"
-        :value="genderText"
+        :value="params.Gender"
         label="Gender"
         right-icon="arrow"
         input-align="right"
@@ -62,7 +62,7 @@
         @click="showGender = true"
       />
       <Field
-        v-model="params.email"
+        v-model="params.Email"
         name="Email"
         label="Email"
         input-align="right"
@@ -90,12 +90,20 @@
         @cancel="showGender = false"
       />
     </Popup>
-    <Calendar v-model="showCalendar" @confirm="onConfirmCalendar" />
+    <Calendar 
+      v-model="showCalendar" 
+      confirm-text="Ok"
+      confirm-disabled-text=""
+      :show-title='false'
+      color="#50CEC3"
+      @confirm="onConfirmCalendar" />
   </div>
 </template>
 
 <script>
 import { NavBar, Uploader, Popup, Picker, Button, Icon, Form, Field, Calendar  } from 'vant'
+import ruler from '@/utils/ruler.js'
+import { mapActions } from 'vuex'
 export default {
   name: 'UpdateInfo',
   components: {
@@ -112,45 +120,93 @@ export default {
   data() {
     return {
       params: {
-        salutation: '',
-        firstName: '',
-        lastName: '',
-        avatar: [{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }],
-        birth: '',
-        email: '',
-        gender: ''
+        Salutation: '',
+        FirstName: '',
+        LastName: '',
+        Avatar: [{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }],
+        Birthday: '',
+        Email: '',
+        Gender: ''
       },
-      salutationText: '',
-      genderText: '',
       showSalutation: false,
       showGender: false,
-      columnsSalutation: [{text:'Mr',code:1},{text:'Miss',code:2}],
-      columnsGender: [{text:'male',code:1},{text:'female',code:2}],
+      columnsSalutation: ['Mr','Ms','Dr', 'Mdm'],
+      columnsGender: ['male','female','unknown'],
       showCalendar: false,
     }
   },
+  mounted() {
+    this.getDefaultInfo()
+  },
   methods: {
+    ...mapActions(["handleUploadAvatar","handleGetProfile","handleUploadAvatar"]),
     onConfirmSalutation(values) {
-      console.log("values",values)
-      this.params.salutation = values.code;
-      this.salutationText = values.text;
+      this.params.Salutation = values;
       this.showSalutation = false;
     },
     onConfirmCalendar(date) {
-      this.value = `${date.getMonth() + 1}/${date.getDate()}`;
+      this.params.Birthday = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
       this.showCalendar = false;
     },
     onConfirmGender(values) {
-      this.params.gender = values.code;
-      this.genderText = values.text;
+      this.params.Gender = values;
       this.showGender = false;
     },
     onClickLeft() {
       this.$router.go(-1)
     },
+    getDefaultInfo(){
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let finalParams={ ...phoneParams}
+      console.log("finalParams",finalParams)
+      // this.handleGetProfile(finalParams).then(
+      //   res => {
+      //     console.log("success",res)
+      //   },
+      //   res => {
+      //     console.log("err",res)
+      //   }
+      // );
+    },
+    afterRead(file){
+      let fileParams = {
+          file: file.file,
+      }
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let finalParams={ ...phoneParams,...fileParams}
+      // this.handleUploadAvatar(finalParams).then(res=>{
+        // this.params['financeReportSheet'] = JSON.stringify({
+        //     id: result.fileId,
+        //     contentType: result.contentType,
+        //     relativeUrl: result.relativeFileUrl,
+        //     fullUrl: result.absoluteFileUrl,
+        // })                  
+      // })
+  },      
     toUpdate() {
-      this.$router.push('/registerResult')
-    }
+      // if(ruler.mobile.test(this.ruleForm.MobileNumber)){
+      //   this.resetTime= false
+      //   this.sendSms()
+      // }else{
+      //   this.resetTime= true
+      // }
+      this.handleSubmit()
+    },
+    handleSubmit(){
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let finalParams={ ...phoneParams, ...this.params}
+      console.log("finalParams",finalParams)
+      return false
+      this.handleUploadAvatar(finalParams).then(
+        res => {
+          console.log("success",res)
+          // this.$router.push('/registerResult')
+        },
+        res => {
+          console.log("err",res)
+        }
+      );
+    },
   }
 }
 </script>

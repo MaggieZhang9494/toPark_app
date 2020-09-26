@@ -1,14 +1,12 @@
 <template>
-  <div class="loginWrap">
-    <login-tips :tipsType="false"/>
+  <div class="resetGetWrap">
+    <login-tips :isForget="true"/>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span style="font-size:24px">Sign In</span>
-        <el-button style="float: right;font-size:14px;color:#cdcdcd;" type="text"
-        @click="toRegister">Sign Up</el-button>
+        <span style="font-size:24px">Reset Password</span>
       </div>
       <div class="text item">
-        <el-form class="loginForm" :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
+        <el-form class="resetGetPhone" :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
           <el-form-item label="" class="leftSelect">
             <el-select v-model="ruleForm.CountryCode" placeholder="">
               <el-option label="+86" value="86"></el-option>
@@ -18,26 +16,21 @@
           <el-form-item label="Phone" prop="MobileNumber" class="rightInput">
             <el-input v-model="ruleForm.MobileNumber"></el-input>
           </el-form-item>
-          <el-form-item label="Password" prop="Password">
-            <el-input type="password" v-model="ruleForm.Password" autocomplete="off" show-password></el-input>
-          </el-form-item>
+          <div class="tips">Please enter your registered phone number ,we will send you a verification code in no time</div>
           <el-form-item>
             <el-button style="width:100%" round type="primary" @click="submitForm('ruleForm')">Next step</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-card>
-    <div style="text-align:center" @click="toReset">Forgot your password?</div>
   </div>
 </template>
 
 <script>
 // 密码不一致，密码少于6位，号码已注册
 import LoginTips from '../../components/login/LoginTips'
-import ruler from '@/utils/ruler.js'
-import { mapActions } from 'vuex'
 export default {
-  name: 'Login',
+  name: 'ResetGetPhone',
   components: {
     LoginTips
   },
@@ -47,65 +40,49 @@ export default {
       time: 59,
       ruleForm: {
         MobileNumber: '',
-        Password: '',
         CountryCode: '86'
       },
       rules: {
         MobileNumber: [
           { required: true, message: '', trigger: 'blur' },
-        ],
-        Password: [
-          { required: true, message: '', trigger: 'blur' },
-          { min: 6, max: 20, message: '', trigger: 'blur' }
         ]
       }
     };
   },
   methods: {
-    ...mapActions(["handleLogin"]),
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.handleSubmit()
+          if(ruler.mobile.test(this.ruleForm.MobileNumber)){
+            this.handleSubmit()
+          }else{
+            this.resetTime= true
+          }
         } else {
           console.log('error submit!!');
-          return false;
+        //  this.$message({
+        //     message: '恭喜你，这是一条成功消息',
+        //     type: 'success',
+        //     showClose: true,
+        //   });
+        //   this.$message.error('错了哦，这是一条错误消息');
+        //   return false;
         }
       });
     },
-    handleSubmit(){
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
-      let ruleParams=this.ruleForm
-      let finalParams={ ...phoneParams, ...ruleParams}
-      console.log("finalParams",finalParams)
-      this.handleLogin(finalParams).then(
-        res => {
-          console.log("success",res)
-          // this.$router.push('/scanCode')
-        },
-        res => {
-          console.log("err",res)
-        }
-      );
+    handleSubmit() {
+      sessionStorage.setItem('ResetInfo',JSON.stringify(this.ruleForm))
+      this.$router.push('/resetPwd')
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    },
-    toLogin() {
-      this.$router.push('/login')
-    },
-    toRegister() {
-      this.$router.push('/login')
-    },
-    toReset() {
-      this.$router.push('/resetGetPhone')
     }
   }
 }
 </script>
 
 <style lang="less">
-.loginWrap{
+.resetGetWrap{
   display: flex;
   flex-direction: column;
   .el-card{
@@ -116,9 +93,15 @@ export default {
     .el-card__body{
       padding: 15px 20px;
     }
-    .loginForm{
+    .resetGetPhone{
       position: relative;
-
+      .tips{
+        font-size: 12px;
+        font-family: SFUIDisplay-Regular;
+        line-height: 14px;
+        color: #9B9B9B;
+        margin-bottom: 20px;
+      }
       .leftSelect{
         width: 70px;
         position: absolute;
@@ -140,12 +123,9 @@ export default {
           background-color: #E9EDEF;
           height: 28px;
           border: none;
-          border-right: 1px solid rgba(138,143,152,0.17);
+          border-right: 1px solid #8A8F98;
           border-radius: 0;
         }
-        // .el-input__icon{
-        //   display: none;
-        // }
       }
 
       .rightInput{
@@ -153,16 +133,6 @@ export default {
           padding-left: 85px;
         }
       }
-
-      .timeCall{
-        float: right;
-        font-size: 16px;
-        font-family: Montserrat;
-        font-weight: 550;
-        line-height: 18px;
-        color: #50CEC3;
-      }
-
     }
 
   }

@@ -6,7 +6,7 @@ import vueTouch from '@/utils/Touch'
 import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 import "@/theme/index.css";
-// import '@/utils/Vconsole.js'
+import '@/utils/Vconsole.js'
 
 Vue.use(ElementUI);
 

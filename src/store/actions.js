@@ -5,12 +5,6 @@ export default {
     testVuex({commit},params){
         commit('TEST',1)
     },
-    /**
-     * 保存状态栏高度
-     */
-    saveStatusBar({commit}, height){
-        commit('STATUS_HEIGHT', height)
-    },
     handleLogin({commit}, params){
         let login = Api.login
         return new Promise((resolve, reject)=>{
@@ -22,87 +16,103 @@ export default {
         })
     },
     /**
-     * 注册--发送手机验证码
+     * 登出
      */
-    registerSendMsg({commit}, params){
-        let registerMobilMsg = Api.registerMobilMsg
+    handleLogOut({commit}, params){
+        let currentApi = Api.logOut
         return new Promise((resolve, reject)=>{
-            Req(registerMobilMsg,{...params}).then(rep=>{
+            Req(currentApi,{...params}).then(rep=>{
                 resolve(rep)
             },err=>{
                 reject(err)
             })
         })
     },
-    /**
-     * 注册--保存
-     */
-    registerSave({commit}, params){
-        let registerSave = Api.registerSave
+    handleGetCodeSelect({commit}, params){
+      let currentApi = Api.register
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    handleRegister({commit}, params){
+      let currentApi = Api.register
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    handleSetPassword({commit}, params){
+      let currentApi = Api.resetPassword
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    handleModifyPassword({commit}, params){
+      let currentApi = Api.modifyPassword
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    handleResetPassword({commit}, params){
+      let currentApi = Api.resetPassword
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    handleUploadAvatar({commit}, params){
+      let currentApi = Api.uploadAvatar
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    handleUploadAvatar({commit}, params){
+      let currentApi = Api.uploadAvatar
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    handleGetProfile({commit}){
+        let currentApi = Api.getProfile
         return new Promise((resolve, reject)=>{
-            Req(registerSave,{...params}).then(rep=>{
+            Req(currentApi).then(rep=>{
+                commit('USER_PROFILE', rep)
                 resolve(rep)
             },err=>{
                 reject(err)
             })
         })
     },
-    /**
-     * 忘记密码--发送手机验证码
-     */
-    forgetSendMsg({commit}, params){
-        let forgetMobileMsg = Api.forgetMobileMsg
+    handleUpdateProfile({commit}){
+        let currentApi = Api.updateProfile
         return new Promise((resolve, reject)=>{
-            Req(forgetMobileMsg,{...params}).then(rep=>{
-                resolve(rep)
-            },err=>{
-                reject(err)
-            })
-        })
-    },
-    /**
-     * 忘记密码--提交
-     */
-    forgetSave({commit}, params){
-        let forgetSave = Api.forgetSave
-        return new Promise((resolve, reject)=>{
-            Req(forgetSave,{...params}).then(rep=>{
-                resolve(rep)
-            },err=>{
-                reject(err)
-            })
-        })
-    },
-    /**
-     * 认证--提交
-     */
-    submitConfirm({commit}, params){
-        let confirmSave = Api.confirm
-        return new Promise((resolve, reject)=>{
-            Req(confirmSave,{...params}).then(rep=>{
-                resolve(rep)
-            },err=>{
-                reject(err)
-            })
-        })
-    },
-    getSelect({commit}){
-        let select = Api.getSelect
-        return new Promise((resolve, reject)=>{
-            Req(select).then(rep=>{
-                resolve(rep)
-            },err=>{
-                reject(err)
-            })
-        })
-    },
-    getUserInfo({commit}){
-        let select = Api.getUserInfo
-        return new Promise((resolve, reject)=>{
-            Req(select).then(rep=>{
-                if(rep.code !== -1){
-                    commit('USER_DETAIL', rep.data)
-                }
+            Req(currentApi).then(rep=>{
                 resolve(rep)
             },err=>{
                 reject(err)

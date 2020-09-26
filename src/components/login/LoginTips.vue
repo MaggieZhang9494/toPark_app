@@ -6,15 +6,20 @@
       @click="onClickLeft"
     >
     </el-link>
-    <div v-show="tipsType">
+    <div v-show="tipsType && !isForget">
       <div class="comLogTips1">Glad to!</div>
       <div class="comLogTips1">meet you</div>
       <div class="comLogTips2">Sign up and get started.</div>
     </div>
-    <div v-show="!tipsType">
+    <div v-show="!tipsType && !isForget">
       <div class="comLogTips1">Welcome</div>
       <div class="comLogTips1">back.</div>
       <div class="comLogTips2">How have you been?</div>
+    </div>
+    <div v-show="isForget">
+      <div class="comLogTips1">Forgot</div>
+      <div class="comLogTips1">password?</div>
+      <div class="comLogTips2">Let’s reset your password</div>
     </div>
   </div>
 </template>
@@ -29,6 +34,12 @@ export default {
   },
   props: {
     tipsType: {
+        type: Boolean,
+        default: () => {
+            // return true
+        }
+    },
+    isForget: {
         type: Boolean,
         default: () => {
             // return true

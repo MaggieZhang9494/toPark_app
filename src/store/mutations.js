@@ -6,11 +6,8 @@ export default{
     ['TEST'](state,data){
         state.test = data
     },
-    ['STATUS_HEIGHT'](state, height){
-        state.barHeight = height
-    },
-    ['USER_DETAIL'](state, data){
-        state.userInfo = data
+    ['USER_PROFILE'](state, data){
+        state.userProfile = data
     }
 }
 

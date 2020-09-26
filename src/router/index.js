@@ -4,6 +4,8 @@ import PageIndex from '@/pages/default/Index'
 import Login from '@/pages/default/Login'
 import Register from '@/pages/default/Register'
 import SetPwd from '@/pages/default/SetPwd'
+import ResetGetPhone from '@/pages/default/ResetGetPhone'
+import ResetPwd from '@/pages/default/ResetPwd'
 import UpdateInfo from '@/pages/default/UpdateInfo'
 import RegisterResult from '@/pages/default/RegisterResult'
 import ScanCode from '@/pages/default/ScanCode'
@@ -35,37 +37,49 @@ export default new Router({
 			path: '/setPwd',
 			name: 'SetPwd',
 			component: SetPwd,
-			meta: {index: 3}
+			meta: {index: 4}
+		},
+		{
+			path: '/resetGetPhone',
+			name: 'ResetGetPhone',
+			component: ResetGetPhone,
+			meta: {index: 5}
+		},
+		{
+			path: '/resetPwd',
+			name: 'ResetPwd',
+			component: ResetPwd,
+			meta: {index: 6}
 		},
 		{
 			path: '/updateInfo',
 			name: 'UpdateInfo',
 			component: UpdateInfo,
-			meta: {index: 4}
+			meta: {index: 7}
     },
     {
 			path: '/registerResult',
 			name: 'RegisterResult',
 			component: RegisterResult,
-			meta: {index: 5}
+			meta: {index: 8}
     },
     {
 			path: '/login',
 			name: 'Login',
 			component: Login,
-			meta: {index: 6}
+			meta: {index: 9}
     },
     {
 			path: '/scanCode',
 			name: 'ScanCode',
 			component: ScanCode,
-			meta: {index: 7}
+			meta: {index: 10}
     },
     {
 			path: '/gateTips',
 			name: 'GateTips',
 			component: GateTips,
-			meta: {index: 8}
+			meta: {index: 11}
     }
 	]
 })

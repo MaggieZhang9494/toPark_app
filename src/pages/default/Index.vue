@@ -53,6 +53,7 @@
 import { mapState, mapActions } from "vuex";
 import { Icon } from "vant";
 import errorTips from "@/utils/registerErr.js";
+import MobileDetect from 'mobile-detect'
 
 export default {
   components: {
@@ -63,9 +64,11 @@ export default {
   },
   mounted() {
     localStorage.clear();
+    this.getDevice()
+
   },
   methods: {
-    ...mapActions(["handleLogin", "getUserInfo"]),
+    ...mapActions(["getUserInfo"]),
     toLogin() {
       this.$router.push("/login");
     },
@@ -86,32 +89,32 @@ export default {
       this.onVerifyLast().then(
         () => {
           let params = { ...this.params };
-          this.onRequest(params);
+          // this.onRequest(params);
         },
         err => {}
       );
     },
     onRequest(params) {
       this.loading = true;
-      this.handleLogin(params).then(
-        res => {
-          if (res.code !== -1) {
-            let tokenStr = res.token_type + " " + res.access_token;
-            localStorage.setItem("DONGHU_TOKEN", tokenStr);
-            sessionStorage.setItem("DONGHU_TOKEN", tokenStr);
-            sessionStorage.setItem(
-              "REFRESH_TOKEN",
-              res.refresh_token
-            );
-            this.$router.push("/confirm");
-          } else {
-          }
-          this.loading = false;
-        },
-        res => {
-          this.loading = false;
-        }
-      );
+      // this.handleLogin(params).then(
+      //   res => {
+      //     if (res.code !== -1) {
+      //       let tokenStr = res.token_type + " " + res.access_token;
+      //       localStorage.setItem("DONGHU_TOKEN", tokenStr);
+      //       sessionStorage.setItem("DONGHU_TOKEN", tokenStr);
+      //       sessionStorage.setItem(
+      //         "REFRESH_TOKEN",
+      //         res.refresh_token
+      //       );
+      //       this.$router.push("/confirm");
+      //     } else {
+      //     }
+      //     this.loading = false;
+      //   },
+      //   res => {
+      //     this.loading = false;
+      //   }
+      // );
     },
     onVerifyLast() {
       let flag = true;
@@ -133,6 +136,33 @@ export default {
           reject(errorMsg);
         }
       });
+    },
+    getDevice() {
+      var md = new MobileDetect(window.navigator.userAgent);
+      console.log( '1', md.mobile() );
+      console.log( '2', md.phone() );
+      // console.log( '3', md.tablet() ); 
+      console.log( '4', md.userAgent() );
+      console.log( '5', md.os() );
+      console.log( '6', md.is('iPhone') );
+      console.log( '8', md.version('Webkit') );
+
+
+
+    // var device_type = navigator.userAgent;//获取userAgent信息  
+    // var md = new MobileDetect(device_type);//实例化mobile-detect  
+    // var os = md.os();//获取系统  
+    // var model = "";  
+    // if (os == "iOS") {//ios系统的处理  
+    //     os = md.os() + md.version("iPhone");  
+    //     model = md.mobile();  
+    // } else if (os == "AndroidOS") {//Android系统的处理  
+    //     os = md.os() + md.version("Android");  
+    // }  
+    // console.log("os",os)
+    // console.log("model", model)
+    // console.log(os + "---" + model);//打印系统版本和手机型号  
+    // console.log(md,"aaaa");
     }
   }
 };
