@@ -52,7 +52,6 @@ export default {
       ruleForm: {
         MobileNumber: '13555555555',
         Otp: '999999',
-        Password:'123456',
         CountryCode: '86'
       },
       rules: {
@@ -78,15 +77,46 @@ export default {
   watch: {
     newMobileNumber(val) {
       if(ruler.mobile.test(this.ruleForm.MobileNumber)){
-        this.resetTime= false
-        this.sendSms()
+        this.checkPhone()
       }else{
         this.resetTime= true
       }
     }
   },
+  mounted(){
+    this.getCodeSelect()
+  },
   methods: {
-    ...mapActions(["handleRegister"]),
+    ...mapActions(["handleRegister","registerSendMsg","handleGetPhoneCheck","handleGetCodeSelect"]),
+    getCodeSelect() {
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      this.handleGetCodeSelect(phoneParams).then(
+        res => {
+          console.log("success",res)
+        },
+        res => {
+          console.log("err",res)
+        }
+      );
+    },
+    checkPhone() {
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let currentParams={
+        CountryCode: this.ruleForm.CountryCode,
+        MobileNumber: this.ruleForm.MobileNumber
+      }
+      let finalParams={ ...phoneParams, ...currentParams}
+      console.log("finalParams",finalParams)
+      this.handleGetPhoneCheck(finalParams).then(
+        res => {
+          this.resetTime= false
+          this.sendSms()
+        },
+        res => {
+          this.$message.error('Hmm.. This number is already registered.');
+        }
+      );
+    },
     sendSms: function(){
       console.log(1)
       this.onTimeChange()
@@ -126,42 +156,21 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.handleSubmit()
-        //  this.$message({
-        //     message: '恭喜你，这是一条成功消息',
-        //     type: 'success',
-        //     showClose: true,
-        //     duration:60000,
-        //     offset: 60
-        //   });
-          // this.$message.error('错了哦，这是一条错误消息');
+          if(!ruler.mobile.test(this.ruleForm.MobileNumber)){
+            this.$message.error('Something’s wrong with your number');
+          }else{
+            this.handleSubmit()
+          }
         } else {
-          console.log('error submit!!');
-         this.$message({
-            message: '恭喜你，这是一条成功消息',
-            type: 'success',
-            showClose: true,
-            duration:60000,
-            offset: 60
-          });
-          // this.$message.error('错了哦，这是一条错误消息');
+          alert('error submit!!');
           return false;
         }
       });
     },
     handleSubmit(){
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
-      let ruleParams=this.ruleForm
-      let finalParams={ ...phoneParams, ...ruleParams}
+      sessionStorage.setItem('registerInfo',JSON.stringify(this.ruleForm))
       console.log("finalParams",finalParams)
-      this.handleRegister(finalParams).then(
-        res => {
-          console.log("success",res)
-        },
-        res => {
-          console.log("err",res)
-        }
-      );
+      this.$router.push('/setPwd')
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

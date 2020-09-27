@@ -29,6 +29,7 @@
 <script>
 // 密码不一致，密码少于6位，号码已注册
 import LoginTips from '../../components/login/LoginTips'
+import { mapState, mapActions } from "vuex";
 export default {
   name: 'ResetGetPhone',
   components: {
@@ -49,7 +50,16 @@ export default {
       }
     };
   },
+  computed: {
+      ...mapState(['contrySelect'])
+  },
+  mounted(){
+      this.setCodeSelect()
+  },
   methods: {
+    setCodeSelect() {
+      
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {

@@ -8,6 +8,9 @@ export default{
     },
     ['USER_PROFILE'](state, data){
         state.userProfile = data
-    }
+    },
+    ['COMMON_COUNTRY_SELECT'](state, data){
+      state.contrySelect = data
+  },
 }
 

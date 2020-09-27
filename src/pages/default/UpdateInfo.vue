@@ -69,7 +69,7 @@
         placeholder="please enter Email"
       />
     </Form>
-    <Button style="margin: 22px;width: auto;font-size:16px" color="#50CEC3" type="primary" round block @click="toUpdate">Update</Button>
+    <Button style="margin: 22px;width: auto;font-size:16px" color="#50CEC3" type="primary" round block @click="handleSubmit">Update</Button>
     <Popup v-model="showSalutation" position="bottom">
       <Picker
         show-toolbar
@@ -139,7 +139,7 @@ export default {
     this.getDefaultInfo()
   },
   methods: {
-    ...mapActions(["handleUploadAvatar","handleGetProfile","handleUploadAvatar"]),
+    ...mapActions(["handleUploadAvatar","handleGetProfile","handleUpdateAvatar"]),
     onConfirmSalutation(values) {
       this.params.Salutation = values;
       this.showSalutation = false;
@@ -182,30 +182,24 @@ export default {
         //     fullUrl: result.absoluteFileUrl,
         // })                  
       // })
-  },      
-    toUpdate() {
-      // if(ruler.mobile.test(this.ruleForm.MobileNumber)){
-      //   this.resetTime= false
-      //   this.sendSms()
-      // }else{
-      //   this.resetTime= true
-      // }
-      this.handleSubmit()
-    },
+    },    
     handleSubmit(){
       let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
       let finalParams={ ...phoneParams, ...this.params}
       console.log("finalParams",finalParams)
-      return false
-      this.handleUploadAvatar(finalParams).then(
-        res => {
-          console.log("success",res)
-          // this.$router.push('/registerResult')
-        },
-        res => {
-          console.log("err",res)
-        }
-      );
+      if( this.params.Email && !ruler.email.test(this.params.Email)){
+        this.$message.error('Please enter the correct email address');
+      }else{
+        this.handleUpdateAvatar(finalParams).then(
+          res => {
+            console.log("success",res)
+            this.$router.push('/registerResult')
+          },
+          res => {
+            console.log("err",res)
+          }
+        )
+      }
     },
   }
 }

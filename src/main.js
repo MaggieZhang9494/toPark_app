@@ -5,11 +5,13 @@ import store from './store/index.js'
 import vueTouch from '@/utils/Touch'
 import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
+import { Locale } from 'vant';
+import enUS from 'vant/lib/locale/lang/en-US';
 import "@/theme/index.css";
 import '@/utils/Vconsole.js'
 
 Vue.use(ElementUI);
-
+Locale.use('en-US', enUS);
 Vue.directive("tap",{
   bind:function(el,binding){
     new vueTouch(el,binding,"tap");

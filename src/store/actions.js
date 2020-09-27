@@ -29,7 +29,18 @@ export default {
         })
     },
     handleGetCodeSelect({commit}, params){
-      let currentApi = Api.register
+      let currentApi = Api.countrySelect
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+            commit('COMMON_COUNTRY_SELECT', rep)
+            resolve(rep)
+          },err=>{
+            reject(err)
+          })
+      })
+    },
+    handleGetPhoneCheck({commit}, params){
+      let currentApi = Api.phoneCheck
       return new Promise((resolve, reject)=>{
           Req(currentApi,{...params}).then(rep=>{
               resolve(rep)
@@ -88,8 +99,8 @@ export default {
           })
       })
     },
-    handleUploadAvatar({commit}, params){
-      let currentApi = Api.uploadAvatar
+    handleUpdateAvatar({commit}, params){
+      let currentApi = Api.updateProfile
       return new Promise((resolve, reject)=>{
           Req(currentApi,{...params}).then(rep=>{
               resolve(rep)

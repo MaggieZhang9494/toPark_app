@@ -40,29 +40,6 @@ export default {
     LoginTips
   },
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(''));
-      } else if (value.length < 6) {
-        callback(new Error(''));
-      } else {
-        if (this.ruleForm.checkPass !== '') {
-          this.$refs.ruleForm.validateField('checkPass');
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'));
-      } else if (value.length < 6) {
-        callback(new Error(''));
-      }  else if (value !== this.ruleForm.pass) {
-        callback(new Error('两次输入密码不一致!'));
-      } else {
-        callback();
-      }
-    };
     return {
       labelPosition: 'top',
       ruleForm: {
@@ -74,10 +51,10 @@ export default {
       show2: false,
       rules: {
         pass: [
-          { validator: validatePass, trigger: 'blur' }
+          { required: true, message: '', trigger: 'blur' }
         ],
         checkPass: [
-          { validator: validatePass2, trigger: 'blur' }
+          { required: true, message: '', trigger: 'blur' }
         ],
       }
     };
@@ -87,7 +64,13 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.handleSubmit()
+          if(this.ruleForm.pass < 6 || this.ruleForm.checkPass < 6){
+            this.$message.error('Password must be at least 6 digits')
+          }else if(this.ruleForm.pass !== this.ruleForm.checkPass) {
+            this.$message.error('Password mismatch, please verify again')
+          }else{
+            this.handleSubmit()
+          }
         } else {
           console.log('error submit!!');
           return false;
@@ -96,13 +79,14 @@ export default {
     },
     handleSubmit(){
       let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
-      let ruleParams=this.ruleForm
-      let finalParams={ ...phoneParams, ...ruleParams}
+      let registerInfo= JSON.parse(sessionStorage.getItem('registerInfo'))
+      registerInfo.Password=this.ruleForm.checkPass
+      let finalParams={ ...phoneParams, ...registerInfo}
       console.log("finalParams",finalParams)
       this.handleSetPassword(finalParams).then(
         res => {
           console.log("success",res)
-          // this.$router.push('/updateInfo')
+          this.$router.push('/updateInfo')
         },
         res => {
           console.log("err",res)

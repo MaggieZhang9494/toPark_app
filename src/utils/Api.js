@@ -24,6 +24,27 @@ export default {
     params: {
     }
   },
+  countrySelect: {
+    url:'/app/country/get-list',
+    type: 'upload',
+  },
+  phoneCheck:{
+    url: '/app/user/login',
+    type: 'upload',
+    params: {
+      Version:'',
+      Timestamp:'',
+      Longitude:'',
+      Latitude:'',
+      OS:'',
+      OSVersion:'',
+      Manufacturer:'',
+      PhoneModel:'',
+      Resolution:'',
+      CountryCode:'',
+      MobileNumber:'',
+    }
+  },
   register:{
     url: '/app/user/register',
     type: 'upload',

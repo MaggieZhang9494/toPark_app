@@ -56,17 +56,36 @@ export default {
         ],
         Password: [
           { required: true, message: '', trigger: 'blur' },
-          { min: 6, max: 20, message: '', trigger: 'blur' }
         ]
       }
     };
   },
+  mounted(){
+    this.getCodeSelect()
+  },
   methods: {
-    ...mapActions(["handleLogin"]),
+    ...mapActions(["handleLogin","handleGetCodeSelect"]),
+    getCodeSelect() {
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      this.handleGetCodeSelect(phoneParams).then(
+        res => {
+          console.log("success",res)
+        },
+        res => {
+          console.log("err",res)
+        }
+      );
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.handleSubmit()
+          if(!ruler.mobile.test(this.ruleForm.MobileNumber)){
+            this.$message.error('Something’s wrong with your number');
+          }else if(this.ruleForm.Password < 6){
+            this.$message.error('Password must be at least 6 digits')
+          }else{
+            this.handleSubmit()
+          }
         } else {
           console.log('error submit!!');
           return false;
@@ -81,7 +100,7 @@ export default {
       this.handleLogin(finalParams).then(
         res => {
           console.log("success",res)
-          // this.$router.push('/scanCode')
+          this.$router.push('/scanCode')
         },
         res => {
           console.log("err",res)

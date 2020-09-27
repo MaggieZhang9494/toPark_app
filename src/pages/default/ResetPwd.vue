@@ -44,29 +44,6 @@ export default {
     LoginTips
   },
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(''));
-      } else if (value.length < 6) {
-        callback(new Error(''));
-      } else {
-        if (this.ruleForm.checkPass !== '') {
-          this.$refs.ruleForm.validateField('checkPass');
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'));
-      } else if (value.length < 6) {
-        callback(new Error(''));
-      }  else if (value !== this.ruleForm.pass) {
-        callback(new Error('两次输入密码不一致!'));
-      } else {
-        callback();
-      }
-    };
     return {
       labelPosition: 'top',
       time: 59,
@@ -80,17 +57,12 @@ export default {
       rules: {
         newPwd: [
           { required: true, message: '', trigger: 'blur' },
-          { min: 6, max: 20, message: '', trigger: 'blur' },
-          { validator: validatePass, trigger: 'blur' }
         ],
         confirmPwd: [
           { required: true, message: '', trigger: 'blur' },
-          { min: 6, max: 20, message: '', trigger: 'blur' },
-          { validator: validatePass2, trigger: 'blur' }
         ],
         Opt: [
           { required: true, message: '', trigger: 'blur' },
-          { min: 6, max: 6, message: '', trigger: 'blur' },
         ],
       },
       send: {
@@ -148,14 +120,15 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.handleSubmit()
+          if(this.ruleForm.newPwd < 6 || this.ruleForm.confirmPwd < 6){
+            this.$message.error('Password must be at least 6 digits')
+          }else if(this.ruleForm.newPwd !== this.ruleForm.confirmPwd) {
+            this.$message.error('Password mismatch, please verify again')
+          }else{
+            this.handleSubmit()
+          }
         } else {
           console.log('error submit!!');
-          this.$message({
-              message: '恭喜你，这是一条成功消息',
-              type: 'success',
-              showClose: true,
-            });
             this.$message.error('错了哦，这是一条错误消息');
             return false;
         }

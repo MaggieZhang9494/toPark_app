@@ -4,12 +4,15 @@
 
 <script>
 export default {
-    name: 'Download',
-    mounted(){
-        this.toDownload()
-    },
-    methods: {
-      toDownload() {}
+  name: 'Download',
+  mounted(){
+    this.toDownload()
+  },
+  methods: {
+    toDownload() {
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      
     }
+  }
 }
 </script>
