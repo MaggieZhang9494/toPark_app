@@ -144,6 +144,8 @@ import { Overlay, Popup, Picker, Uploader  } from 'vant';
 import PositionModal from '../../components/access/PositionModal'
 import OpenBg from '../../components/access/OpenBg'
 import dragVerify from 'vue-drag-verify2'
+import ruler from '@/utils/ruler.js'
+import { mapActions } from 'vuex'
 export default {
   name: 'GateTips',
   components:  {
@@ -200,10 +202,21 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["handleLogin"]),
     // getWindowSize(){
     //   this.windowSize=   `${document.documentElement.clientWidth}` - 40
     //   console.log("width",width)
     // },
+    getDetail(){
+      this.handleLogin().then(
+        res => {
+          console.log("success",res)
+        },
+        res => {
+          console.log("err",res)
+        }
+      );
+    },
     getTime() {
       var _this = this;
       let curretTime= new Date()

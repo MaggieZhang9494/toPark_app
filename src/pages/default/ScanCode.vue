@@ -10,24 +10,40 @@
       <!-- <img src="../../assets/top_icon.png"/> -->
       <Icon style="padding-top: 15px;padding-bottom: 20px;" name="scan" size="77" color="#50CEC3"/>
       <div class="scanTips">Scan QR code for access</div>
-      <el-button round type="primary" @click="toAccess">Scan It</el-button>
+      <!-- <el-button round type="primary" @click="toAccess">Scan It</el-button> -->
+      <input  type="file" accept="image/*" capture="camera">
     </el-card>
   </div>
 </template>
 
 <script>
 import { Icon } from 'vant'
+import { mapActions } from 'vuex'
 export default {
   name: 'ScanCode',
   components:{
     Icon
   },
+  mounted(){
+    // this.getDetail()
+  },
   methods: {
+    ...mapActions(["handleLogin"]),
     onClickLeft() {
       this.$router.go(-1)
     },
     toAccess() {
       this.$router.push('/gateTips')
+    },
+    getDetail(){
+      this.handleLogin().then(
+        res => {
+          console.log("success",res)
+        },
+        res => {
+          console.log("err",res)
+        }
+      );
     }
   }
 }
