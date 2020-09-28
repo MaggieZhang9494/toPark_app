@@ -53,7 +53,6 @@
 import { mapState, mapActions } from "vuex";
 import { Icon } from "vant";
 import errorTips from "@/utils/registerErr.js";
-import MobileDetect from 'mobile-detect'
 
 export default {
   components: {
@@ -64,8 +63,6 @@ export default {
   },
   mounted() {
     localStorage.clear();
-    this.getDevice()
-
   },
   methods: {
     ...mapActions(["getUserInfo"]),

@@ -10,25 +10,44 @@
       <!-- <img src="../../assets/top_icon.png"/> -->
       <Icon style="padding-top: 15px;padding-bottom: 20px;" name="scan" size="77" color="#50CEC3"/>
       <div class="scanTips">Scan QR code for access</div>
-      <!-- <el-button round type="primary" @click="toAccess">Scan It</el-button> -->
-      <input  type="file" accept="image/*" capture="camera">
+       <!-- @click="toAccess" -->
+      <el-button round type="primary" @click="show = true">Scan It</el-button>
+      <!-- <input  type="file" accept="image/*" capture="camera"> -->
     </el-card>
+    <div v-show="show" class="scanWrap">
+      <i class="el-icon-error" @click="show = false"/>
+      <qrcode-stream v-show="show" @decode="onDecode"  style="width:100%;height:100%"></qrcode-stream>
+    </div>
   </div>
 </template>
 
 <script>
-import { Icon } from 'vant'
+import { Icon, Overlay  } from 'vant'
 import { mapActions } from 'vuex'
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 export default {
   name: 'ScanCode',
   components:{
-    Icon
+    Icon,
+    Overlay,
+    QrcodeStream,
+    QrcodeDropZone,
+    QrcodeCapture
+  },
+  data(){
+    return{
+      show: false
+    }
   },
   mounted(){
     // this.getDetail()
   },
   methods: {
     ...mapActions(["handleLogin"]),
+    onDecode (decodedString) {
+      console.log("decodedString",decodedString)
+      // ...
+    },
     onClickLeft() {
       this.$router.go(-1)
     },
@@ -87,6 +106,25 @@ export default {
         padding: 16px 25px;
         font-size: 16px;
       }
+    }
+  }
+  .scanWrap{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 998;
+    .el-icon-error{
+      position:fixed;
+      left:20px;
+      top:30px;
+      font-size: 25px;
+      color: #efefef;
+      z-index: 999;
     }
   }
 }
