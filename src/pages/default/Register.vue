@@ -169,7 +169,6 @@ export default {
     },
     handleSubmit(){
       sessionStorage.setItem('registerInfo',JSON.stringify(this.ruleForm))
-      console.log("finalParams",finalParams)
       this.$router.push('/setPwd')
     },
     resetForm(formName) {

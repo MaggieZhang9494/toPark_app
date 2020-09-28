@@ -1,6 +1,6 @@
 // 在http.js中引入axios
 import axios from 'axios'; // 引入axios
-import QS from 'qs'; // 引入qs模块，用来序列化post类型的数据
+import qs from 'qs'; // 引入qs模块，用来序列化post类型的数据
 
 let currentUrl=  ''
 if (process.env.NODE_ENV == 'development') {    
@@ -105,10 +105,11 @@ const methods = {
   upload(url, params={}){
     return service({
       method: 'post',
-      url,
+      url: url + '?' + qs.stringify(params),
       data: setFormData(params),
       headers: {
-        'Content-Type': 'multipart/form-data'
+        // 'Content-Type': 'multipart/form-data'
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
     }).then(res => {
       // if(res.code == '-1'){
