@@ -11,7 +11,7 @@
       <Field name="uploader" label="Avatar Setting" input-align="right"
       right-icon="arrow">
         <template #input>
-          <Uploader v-model="params.Avatar" max-count="1" :after-read="afterRead" />
+          <Uploader v-model="params.Avatar" max-count="1" :after-read="afterRead"/>
         </template>
       </Field>
       <Field
@@ -123,7 +123,7 @@ export default {
         Salutation: '',
         FirstName: '',
         LastName: '',
-        Avatar: [{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }],
+        Avatar: [],
         Birthday: '',
         Email: '',
         Gender: ''
@@ -156,35 +156,36 @@ export default {
       this.$router.go(-1)
     },
     getDefaultInfo(){
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
-      let finalParams={ ...phoneParams}
-      console.log("finalParams",finalParams)
-      // this.handleGetProfile(finalParams).then(
-      //   res => {
-      //     console.log("success",res)
-      //   },
-      //   res => {
-      //     console.log("err",res)
-      //   }
-      // );
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
+      this.handleGetProfile(phoneParams).then(
+        res => {
+          console.log("getDefaultInfo-success",res)
+        },
+        res => {
+          console.log("err",res)
+        }
+      );
     },
     afterRead(file){
+      let blobs = this.dataURLtoFile(file.content);
+      console.log("blobs",blobs)
       let fileParams = {
-          file: file.file,
+          Resource: blobs
       }
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
       let finalParams={ ...phoneParams,...fileParams}
-      // this.handleUploadAvatar(finalParams).then(res=>{
+      this.handleUploadAvatar(finalParams).then(res=>{
+        console.log("fileres",res)
         // this.params['financeReportSheet'] = JSON.stringify({
         //     id: result.fileId,
         //     contentType: result.contentType,
         //     relativeUrl: result.relativeFileUrl,
         //     fullUrl: result.absoluteFileUrl,
         // })                  
-      // })
-    },    
+      })
+    },
     handleSubmit(){
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
       let finalParams={ ...phoneParams, ...this.params}
       console.log("finalParams",finalParams)
       if( this.params.Email && !ruler.email.test(this.params.Email)){

@@ -11,8 +11,7 @@
         <el-form class="registerForm" :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
           <el-form-item label="" class="leftSelect">
             <el-select v-model="ruleForm.CountryCode" placeholder="">
-              <el-option label="+86" value="86"></el-option>
-              <el-option label="+83" value="83"></el-option>
+              <el-option v-for="(item, index) in codeSelect" :label="'+'+item" :value="item" :key="index+'selectRegister'"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Phone" prop="MobileNumber" class="rightInput">
@@ -52,8 +51,9 @@ export default {
       ruleForm: {
         MobileNumber: '13555555555',
         Otp: '999999',
-        CountryCode: '86'
+        CountryCode: ''
       },
+      codeSelect: [],
       rules: {
         MobileNumber: [
           { required: true, message: '', trigger: 'blur' }
@@ -89,10 +89,27 @@ export default {
   methods: {
     ...mapActions(["handleRegister","registerSendMsg","handleGetPhoneCheck","handleGetCodeSelect"]),
     getCodeSelect() {
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
+      console.log("phoneParams",phoneParams)
       this.handleGetCodeSelect(phoneParams).then(
         res => {
-          console.log("success",res)
+          if(res.status == 200 && res.data && res.data.Success){
+            if(res.data.Data && res.data.Data.List && res.data.Data.List.length){
+              let currentCode=[]
+              res.data.Data.List.map((item,index)=>{
+                if(index==0){
+                  this.ruleForm.CountryCode= item.CountryCode
+                }
+                currentCode.push(item.CountryCode)
+              })
+              console.log("currentCode",currentCode)
+              this.codeSelect= currentCode
+            }
+          }else if(res.data){
+            this.$message.error(res.data.ErrorMessage)
+          }else{
+            this.$message.error('Something is wrong')
+          }
         },
         res => {
           console.log("err",res)
@@ -100,7 +117,7 @@ export default {
       );
     },
     checkPhone() {
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
       let currentParams={
         CountryCode: this.ruleForm.CountryCode,
         MobileNumber: this.ruleForm.MobileNumber

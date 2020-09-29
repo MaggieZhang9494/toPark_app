@@ -11,8 +11,7 @@
         <el-form class="loginForm" :label-position="labelPosition" :model="ruleForm" :rules="rules" ref="ruleForm">
           <el-form-item label="" class="leftSelect">
             <el-select v-model="ruleForm.CountryCode" placeholder="">
-              <el-option label="+86" value="86"></el-option>
-              <el-option label="+83" value="83"></el-option>
+              <el-option v-for="(item, index) in codeSelect" :label="'+'+item" :value="item" :key="index+'select'"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Phone" prop="MobileNumber" class="rightInput">
@@ -48,8 +47,9 @@ export default {
       ruleForm: {
         MobileNumber: '',
         Password: '',
-        CountryCode: '86'
+        CountryCode: ''
       },
+      codeSelect:[],
       rules: {
         MobileNumber: [
           { required: true, message: '', trigger: 'blur' },
@@ -66,10 +66,26 @@ export default {
   methods: {
     ...mapActions(["handleLogin","handleGetCodeSelect"]),
     getCodeSelect() {
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
       this.handleGetCodeSelect(phoneParams).then(
         res => {
-          console.log("success",res)
+          if(res.status == 200 && res.data && res.data.Success){
+            if(res.data.Data && res.data.Data.List && res.data.Data.List.length){
+              let currentCode=[]
+              res.data.Data.List.map((item,index)=>{
+                if(index==0){
+                  this.ruleForm.CountryCode= item.CountryCode
+                }
+                currentCode.push(item.CountryCode)
+              })
+              console.log("currentCode",currentCode)
+              this.codeSelect= currentCode
+            }
+          }else if(res.data){
+            this.$message.error(res.data.ErrorMessage)
+          }else{
+            this.$message.error('Something is wrong')
+          }
         },
         res => {
           console.log("err",res)
@@ -93,14 +109,19 @@ export default {
       });
     },
     handleSubmit(){
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
       let ruleParams=this.ruleForm
       let finalParams={ ...phoneParams, ...ruleParams}
       console.log("finalParams",finalParams)
       this.handleLogin(finalParams).then(
         res => {
-          console.log("success",res)
-          this.$router.push('/scanCode')
+          if(res.status == 200 && res.data && res.data.Success){
+            this.$router.push('/scanCode')
+          }else if(res.data){
+            this.$message.error(res.data.ErrorMessage)
+          }else{
+            this.$message.error('Something is wrong')
+          }
         },
         res => {
           console.log("err",res)

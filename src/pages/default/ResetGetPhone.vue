@@ -29,7 +29,8 @@
 <script>
 // 密码不一致，密码少于6位，号码已注册
 import LoginTips from '../../components/login/LoginTips'
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex"
+import ruler from '@/utils/ruler.js'
 export default {
   name: 'ResetGetPhone',
   components: {
@@ -70,13 +71,6 @@ export default {
           }
         } else {
           console.log('error submit!!');
-        //  this.$message({
-        //     message: '恭喜你，这是一条成功消息',
-        //     type: 'success',
-        //     showClose: true,
-        //   });
-        //   this.$message.error('错了哦，这是一条错误消息');
-        //   return false;
         }
       });
     },

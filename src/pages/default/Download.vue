@@ -10,8 +10,7 @@ export default {
   },
   methods: {
     toDownload() {
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
-      
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
     }
   }
 }

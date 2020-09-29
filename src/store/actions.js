@@ -9,9 +9,10 @@ export default {
         let login = Api.login
         return new Promise((resolve, reject)=>{
             Req(login,{...params}).then(rep=>{
-                resolve(rep)
+              commit('USER_PROFILE', rep)
+              resolve(rep)
             },err=>{
-                reject(err)
+              reject(err)
             })
         })
     },
@@ -109,10 +110,10 @@ export default {
           })
       })
     },
-    handleGetProfile({commit}){
+    handleGetProfile({commit}, params){
         let currentApi = Api.getProfile
         return new Promise((resolve, reject)=>{
-            Req(currentApi).then(rep=>{
+            Req(currentApi,{...params}).then(rep=>{
                 commit('USER_PROFILE', rep)
                 resolve(rep)
             },err=>{

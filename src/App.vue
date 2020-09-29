@@ -10,7 +10,6 @@
 
 <script>
 import '../src/styles/base.less'
-import MobileDetect from 'mobile-detect'
 // import Req from '@/utils/Https';
 export default {
 	name: 'App',
@@ -29,15 +28,13 @@ export default {
         PhoneModel:'iphoneX',
         Resolution:'1242x2688',
       },
-      phoneWidth: document.documentElement.clientWidth,
-      phoneHeight: document.documentElement.clientHeight
 		}
 	},
   created() {
     
   },
   mounted(){
-    this.getPosition()
+    sessionStorage.setItem('phoneParams',JSON.stringify(this.phoneParams))
   },
 	watch: {
 		$route(to, from) {
@@ -55,52 +52,6 @@ export default {
 		}
     },
     methods: {
-      getPosition(){
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(this.showPosition,this.showError);
-        }else {
-          this.$message.error('Geolocation is not supported by this browser.')
-        }
-      },
-      showPosition(position){
-        this.phoneParams.Longitude= position.coords.longitude
-        this.phoneParams.Latitude= position.coords.latitude
-        this.getDevice()
-      },
-      showError(error){
-        switch(error.code) 
-          {
-          case error.PERMISSION_DENIED:
-            this.$message.error('User denied the request for Geolocation.')
-            break;
-          case error.POSITION_UNAVAILABLE:
-            this.$message.error('Location information is unavailable.')
-            break;
-          case error.TIMEOUT:
-            this.$message.error('The request to get user location timed out.')
-            break;
-          case error.UNKNOWN_ERROR:
-            this.$message.error('An unknown error occurred.')
-            break;
-          }
-      },
-      getDevice() {
-        var md = new MobileDetect(window.navigator.userAgent);
-        // console.log( '1', md.mobile() );
-        // console.log( '2', md.phone() );
-        // console.log( '3', md.tablet() ); 
-        // console.log( '4', md.userAgent() );
-        // console.log( '5', md.os() );
-        // console.log( '6', md.is('iPhone') );
-        // console.log( '8', md.version('Webkit') );
-        this.setPhoneParams()
-      },
-      setPhoneParams() {
-        let finalParams={...this.phoneParams}
-        finalParams.Resolution= `${this.phoneWidth}x${this.phoneHeight}`
-        console.log("finalParams",finalParams)
-        sessionStorage.setItem('phoneInfo',JSON.stringify(finalParams))
-      },
       dateFormat(fmt, date) {
         let ret;
         const opt = {

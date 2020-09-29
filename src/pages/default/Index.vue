@@ -53,19 +53,80 @@
 import { mapState, mapActions } from "vuex";
 import { Icon } from "vant";
 import errorTips from "@/utils/registerErr.js";
-
+import MobileDetect from 'mobile-detect'
 export default {
   components: {
     Icon
   },
   data() {
-    return {};
+    return {
+      phoneParams:{
+        Version:'2019-11-05',
+        Timestamp: this.dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
+        Longitude:'103.898168',
+        Latitude:'1.28134',
+        OS:'ios',
+        OSVersion:'13.0.1',
+        Manufacturer:'apple',
+        PhoneModel:'iphoneX',
+        Resolution:'1242x2688',
+      },
+      phoneWidth: document.documentElement.clientWidth,
+      phoneHeight: document.documentElement.clientHeight
+    };
   },
   mounted() {
     localStorage.clear();
+    // this.getPosition()
   },
   methods: {
     ...mapActions(["getUserInfo"]),
+    getPosition(){
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.showPosition,this.showError);
+      }else {
+        this.$message.error('Geolocation is not supported by this browser.')
+      }
+    },
+    showPosition(position){
+      this.phoneParams.Longitude= position.coords.longitude
+      this.phoneParams.Latitude= position.coords.latitude
+      this.getDevice()
+    },
+    showError(error){
+      switch(error.code) 
+        {
+        case error.PERMISSION_DENIED:
+          this.$message.error('User denied the request for Geolocation.')
+          break;
+        case error.POSITION_UNAVAILABLE:
+          this.$message.error('Location information is unavailable.')
+          break;
+        case error.TIMEOUT:
+          this.$message.error('The request to get user location timed out.')
+          break;
+        case error.UNKNOWN_ERROR:
+          this.$message.error('An unknown error occurred.')
+          break;
+        }
+    },
+    getDevice() {
+      var md = new MobileDetect(window.navigator.userAgent);
+      // console.log( '1', md.mobile() );
+      // console.log( '2', md.phone() );
+      // console.log( '3', md.tablet() ); 
+      // console.log( '4', md.userAgent() );
+      // console.log( '5', md.os() );
+      // console.log( '6', md.is('iPhone') );
+      // console.log( '8', md.version('Webkit') );
+      this.setPhoneParams()
+    },
+    setPhoneParams() {
+      let finalParams={...this.phoneParams}
+      finalParams.Resolution= `${this.phoneWidth}x${this.phoneHeight}`
+      console.log("finalParams",finalParams)
+      sessionStorage.setItem('phoneParams',JSON.stringify(finalParams))
+    },
     toLogin() {
       this.$router.push("/login");
     },

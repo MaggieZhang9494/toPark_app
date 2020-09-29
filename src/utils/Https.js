@@ -4,9 +4,9 @@ import qs from 'qs'; // 引入qs模块，用来序列化post类型的数据
 
 let currentUrl=  ''
 if (process.env.NODE_ENV == 'development') {    
-  currentUrl = 'http://27.17.34.226:28064'} 
+  currentUrl = 'https://api.topark.alicloud.group'} 
 else if (process.env.NODE_ENV == 'production') {    
-  currentUrl = 'http://27.17.34.226:28064'
+  currentUrl = 'https://api.topark.alicloud.group'
 }
 
 // 创建 axios 实例

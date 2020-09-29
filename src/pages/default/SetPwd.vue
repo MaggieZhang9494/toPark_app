@@ -60,7 +60,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["handleSetPassword"]),
+    ...mapActions(["handleSetPassword","handleRegister"]),
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -78,15 +78,20 @@ export default {
       });
     },
     handleSubmit(){
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
       let registerInfo= JSON.parse(sessionStorage.getItem('registerInfo'))
       registerInfo.Password=this.ruleForm.checkPass
       let finalParams={ ...phoneParams, ...registerInfo}
       console.log("finalParams",finalParams)
-      this.handleSetPassword(finalParams).then(
+      this.handleRegister(finalParams).then(
         res => {
-          console.log("success",res)
-          this.$router.push('/updateInfo')
+          if(res.status == 200 && res.data && res.data.Success){
+            this.$router.push('/updateInfo')
+          }else if(res.data){
+            this.$message.error(res.data.ErrorMessage)
+          }else{
+            this.$message.error('Something is wrong')
+          }
         },
         res => {
           console.log("err",res)

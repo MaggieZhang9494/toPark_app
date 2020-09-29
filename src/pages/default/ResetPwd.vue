@@ -48,7 +48,7 @@ export default {
       labelPosition: 'top',
       time: 59,
       ruleForm: {
-        Opt: '',
+        Otp: '',
         newPwd: '',
         confirmPwd: '',
         MobileNumber:'',
@@ -61,7 +61,7 @@ export default {
         confirmPwd: [
           { required: true, message: '', trigger: 'blur' },
         ],
-        Opt: [
+        Otp: [
           { required: true, message: '', trigger: 'blur' },
         ],
       },
@@ -80,7 +80,7 @@ export default {
     this.sendSms()
   },
   methods: {
-    ...mapActions(["handleResetPassword"]),
+    ...mapActions(["handleModifyPassword"]),
     sendSms: function(){
       console.log(1)
       this.onTimeChange()
@@ -135,13 +135,19 @@ export default {
       });
     },
     handleSubmit(){
-      let phoneParams= JSON.parse(sessionStorage.getItem('phoneInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
       let ruleParams=this.ruleForm
       let finalParams={ ...phoneParams, ...ruleParams}
       console.log("finalParams",finalParams)
-      this.handleResetPassword(finalParams).then(
+      this.handleModifyPassword(finalParams).then(
         res => {
-          console.log("success",res)
+          if(res.status == 200 && res.data && res.data.Success){
+            this.$router.push('/login')
+          }else if(res.data){
+            this.$message.error(res.data.ErrorMessage)
+          }else{
+            this.$message.error('Something is wrong')
+          }
           // this.$router.push('/updateInfo')
         },
         res => {

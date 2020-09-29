@@ -46,7 +46,13 @@ export default {
     ...mapActions(["handleLogin"]),
     onDecode (decodedString) {
       console.log("decodedString",decodedString)
-      // ...
+      if(decodedString){
+        // window.location.href="https://www.baidu.com"
+        window.location.href= `topark://GotoGuest?DeviceKey=${decodedString}`
+      }else{
+        this.show= false
+        this.$message.error('Access denied. Please contact host.')
+      }
     },
     onClickLeft() {
       this.$router.go(-1)
