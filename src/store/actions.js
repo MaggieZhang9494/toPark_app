@@ -9,7 +9,6 @@ export default {
         let login = Api.login
         return new Promise((resolve, reject)=>{
             Req(login,{...params}).then(rep=>{
-              commit('USER_PROFILE', rep)
               resolve(rep)
             },err=>{
               reject(err)
@@ -40,23 +39,13 @@ export default {
           })
       })
     },
-    handleGetPhoneCheck({commit}, params){
-      let currentApi = Api.phoneCheck
-      return new Promise((resolve, reject)=>{
-          Req(currentApi,{...params}).then(rep=>{
-              resolve(rep)
-          },err=>{
-              reject(err)
-          })
-      })
-    },
     handleRegister({commit}, params){
       let currentApi = Api.register
       return new Promise((resolve, reject)=>{
           Req(currentApi,{...params}).then(rep=>{
-              resolve(rep)
+            resolve(rep)
           },err=>{
-              reject(err)
+            reject(err)
           })
       })
     },
@@ -70,6 +59,7 @@ export default {
           })
       })
     },
+    // 修改密码
     handleModifyPassword({commit}, params){
       let currentApi = Api.modifyPassword
       return new Promise((resolve, reject)=>{
@@ -80,10 +70,44 @@ export default {
           })
       })
     },
-    handleResetPassword({commit}, params){
-      let currentApi = Api.resetPassword
+    // 使用短信重置密码
+    handleResetPasswordSms({commit}, params){
+      let currentApi = Api.resetPasswordSms
       return new Promise((resolve, reject)=>{
           Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    // 发送注册短信
+    handleGetRegisterOtp({commit}, params){
+      let currentApi = Api.getRegisterOtp
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    // 发送重置密码短信
+    handleGetResetOtp({commit}, params){
+      let currentApi = Api.getResetOtp
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              resolve(rep)
+          },err=>{
+              reject(err)
+          })
+      })
+    },
+    handleGetProfile({commit}, params){
+      let currentApi = Api.getProfile
+      return new Promise((resolve, reject)=>{
+          Req(currentApi,{...params}).then(rep=>{
+              commit('USER_PROFILE', rep)
               resolve(rep)
           },err=>{
               reject(err)
@@ -94,13 +118,14 @@ export default {
       let currentApi = Api.uploadAvatar
       return new Promise((resolve, reject)=>{
           Req(currentApi,{...params}).then(rep=>{
+            console.log("rep",rep)
               resolve(rep)
           },err=>{
               reject(err)
           })
       })
     },
-    handleUpdateAvatar({commit}, params){
+    handleUpdateProfile({commit}, params){
       let currentApi = Api.updateProfile
       return new Promise((resolve, reject)=>{
           Req(currentApi,{...params}).then(rep=>{
@@ -110,22 +135,12 @@ export default {
           })
       })
     },
-    handleGetProfile({commit}, params){
-        let currentApi = Api.getProfile
-        return new Promise((resolve, reject)=>{
-            Req(currentApi,{...params}).then(rep=>{
-                commit('USER_PROFILE', rep)
-                resolve(rep)
-            },err=>{
-                reject(err)
-            })
-        })
-    },
     handleUpdateProfile({commit}){
         let currentApi = Api.updateProfile
         return new Promise((resolve, reject)=>{
             Req(currentApi).then(rep=>{
-                resolve(rep)
+              commit('UPDATE_USER_RESULT', rep)
+              resolve(rep)
             },err=>{
                 reject(err)
             })

@@ -28,23 +28,6 @@ export default {
     url:'/app/country/get-list',
     type: 'upload',
   },
-  phoneCheck:{
-    url: '/app/user/login',
-    type: 'upload',
-    params: {
-      Version:'',
-      Timestamp:'',
-      Longitude:'',
-      Latitude:'',
-      OS:'',
-      OSVersion:'',
-      Manufacturer:'',
-      PhoneModel:'',
-      Resolution:'',
-      CountryCode:'',
-      MobileNumber:'',
-    }
-  },
   register:{
     url: '/app/user/register',
     type: 'upload',
@@ -55,6 +38,7 @@ export default {
       Otp:''
     }
   },
+  // 修改密码
   modifyPassword:{
     url: '/app/user/modify-password',
     type: 'upload',
@@ -62,13 +46,32 @@ export default {
       NewPassword:'',
     }
   },
-  resetPassword:{
+  // 使用短信重置密码
+  resetPasswordSms:{
     url: '/app/user/reset-password-by-sms',
     type: 'upload',
     params: {
       MobileNumber:'',
       Otp:'',
       Password:''
+    }
+  },
+  // 发送注册短信
+  getRegisterOtp:{
+    url: '/app/sms/get-register-otp',
+    type: 'upload',
+    params: {
+      MobileNumber:'',
+      CountryCode:''
+    }
+  },
+  // 发送重置密码短信
+  getResetOtp:{
+    url: '/app/sms/get-reset-password-otp',
+    type: 'upload',
+    params: {
+      MobileNumber:'',
+      CountryCode:''
     }
   },
   uploadAvatar:{

@@ -32,22 +32,40 @@ export default new Router({
 			meta: {index: 2}
 		},
 		{
-			path: '/login',
-			name: 'Login',
-			component: Login,
-			meta: {index: 3}
-		},
-		{
 			path: '/setPwd',
 			name: 'SetPwd',
 			component: SetPwd,
-			meta: {index: 4}
+			meta: {index: 3}
 		},
+    {
+			path: '/registerResult',
+			name: 'RegisterResult',
+			component: RegisterResult,
+			meta: {index: 4}
+    },
+		{
+			path: '/login',
+			name: 'Login',
+			component: Login,
+			meta: {index: 5}
+		},
+		{
+			path: '/updateInfo',
+			name: 'UpdateInfo',
+			component: UpdateInfo,
+			meta: {index: 6}
+    },
+    {
+			path: '/scanCode',
+			name: 'ScanCode',
+			component: ScanCode,
+			meta: {index: 7}
+    },
 		{
 			path: '/resetGetPhone',
 			name: 'ResetGetPhone',
 			component: ResetGetPhone,
-			meta: {index: 5}
+			meta: {index: 6}
 		},
 		{
 			path: '/resetPwd',
@@ -55,30 +73,6 @@ export default new Router({
 			component: ResetPwd,
 			meta: {index: 6}
 		},
-		{
-			path: '/updateInfo',
-			name: 'UpdateInfo',
-			component: UpdateInfo,
-			meta: {index: 7}
-    },
-    {
-			path: '/registerResult',
-			name: 'RegisterResult',
-			component: RegisterResult,
-			meta: {index: 8}
-    },
-    {
-			path: '/login',
-			name: 'Login',
-			component: Login,
-			meta: {index: 9}
-    },
-    {
-			path: '/scanCode',
-			name: 'ScanCode',
-			component: ScanCode,
-			meta: {index: 10}
-    },
     {
 			path: '/gateTips',
 			name: 'GateTips',

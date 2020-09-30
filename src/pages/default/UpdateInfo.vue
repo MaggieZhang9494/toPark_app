@@ -103,7 +103,7 @@
 <script>
 import { NavBar, Uploader, Popup, Picker, Button, Icon, Form, Field, Calendar  } from 'vant'
 import ruler from '@/utils/ruler.js'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'UpdateInfo',
   components: {
@@ -136,10 +136,14 @@ export default {
     }
   },
   mounted() {
+    console.log("this.userProfile",this.userProfile)
     this.getDefaultInfo()
   },
+  computed: {
+      ...mapState(['userProfile'])
+  },
   methods: {
-    ...mapActions(["handleUploadAvatar","handleGetProfile","handleUpdateAvatar"]),
+    ...mapActions(["handleUploadAvatar","handleGetProfile","handleUpdateProfile"]),
     onConfirmSalutation(values) {
       this.params.Salutation = values;
       this.showSalutation = false;
@@ -167,22 +171,33 @@ export default {
       );
     },
     afterRead(file){
-      let blobs = this.dataURLtoFile(file.content);
-      console.log("blobs",blobs)
-      let fileParams = {
-          Resource: blobs
-      }
+      let currentFile= this.dataURLtoFileFun(file.content, file.file.name)
       let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
-      let finalParams={ ...phoneParams,...fileParams}
-      this.handleUploadAvatar(finalParams).then(res=>{
+      phoneParams.Resource= currentFile
+      console.log("phoneParams",phoneParams)
+      this.handleUploadAvatar(phoneParams).then(res=>{
         console.log("fileres",res)
-        // this.params['financeReportSheet'] = JSON.stringify({
-        //     id: result.fileId,
-        //     contentType: result.contentType,
-        //     relativeUrl: result.relativeFileUrl,
-        //     fullUrl: result.absoluteFileUrl,
-        // })                  
+        if(res.status == 200 && res.data && res.data.Success){
+            
+        }else if(res.data){
+          this.$message.error(res.data.ErrorMessage)
+        }else{
+          this.$message.error('Something is wrong')
+        }                
       })
+    },
+    dataURLtoFileFun (dataurl, filename) {
+      console.log("dataurl",dataurl)
+      // 将base64转换为文件，dataurl为base64字符串，filename为文件名（必须带后缀名，如.jpg,.png）
+      let arr = dataurl.split(",");
+      let mime = arr[0].match(/:(.*?);/)[1];
+      let bstr = atob(arr[1]);
+      let n = bstr.length;
+      let u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
     },
     handleSubmit(){
       let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
@@ -191,10 +206,16 @@ export default {
       if( this.params.Email && !ruler.email.test(this.params.Email)){
         this.$message.error('Please enter the correct email address');
       }else{
-        this.handleUpdateAvatar(finalParams).then(
+        this.handleUpdateProfile(finalParams).then(
           res => {
             console.log("success",res)
-            this.$router.push('/registerResult')
+            if(res.status == 200 && res.data && res.data.Success){
+              this.$router.push('/registerResult')
+            }else if(res.data){
+              this.$message.error(res.data.ErrorMessage)
+            }else{
+              this.$message.error('Something is wrong')
+            }  
           },
           res => {
             console.log("err",res)

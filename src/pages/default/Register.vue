@@ -27,7 +27,7 @@
             </el-col>
           </el-row>
           <el-form-item>
-            <el-button style="width:100%" round type="primary" @click="submitForm('ruleForm')">Next step</el-button>
+            <el-button :disabled="btnDisabled" :loading="btnLoading" style="width:100%" round type="primary" @click="submitForm('ruleForm')">Next step</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -49,8 +49,8 @@ export default {
     return {
       labelPosition: 'top',
       ruleForm: {
-        MobileNumber: '13555555555',
-        Otp: '999999',
+        MobileNumber: '',
+        Otp: '',
         CountryCode: ''
       },
       codeSelect: [],
@@ -67,27 +67,38 @@ export default {
         times: 59,
       },
       resetTime:false,
+      btnLoading: false,
+      btnDisabled: true
     };
   },
   computed: {
     newMobileNumber() {
       return this.ruleForm.MobileNumber;
+    },
+    newOtp() {
+      return this.ruleForm.Otp;
     }
   },
   watch: {
     newMobileNumber(val) {
       if(ruler.mobile.test(this.ruleForm.MobileNumber)){
-        this.checkPhone()
+        this.getOtp()
       }else{
         this.resetTime= true
+      }
+    },
+    newOtp(val) {
+      if(val.length){
+        this.btnDisabled= false
       }
     }
   },
   mounted(){
+    this.btnDisabled= true
     this.getCodeSelect()
   },
   methods: {
-    ...mapActions(["handleRegister","registerSendMsg","handleGetPhoneCheck","handleGetCodeSelect"]),
+    ...mapActions(["handleRegister","registerSendMsg","handleGetCodeSelect",'handleGetRegisterOtp']),
     getCodeSelect() {
       let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
       console.log("phoneParams",phoneParams)
@@ -116,33 +127,25 @@ export default {
         }
       );
     },
-    checkPhone() {
+    getOtp: function(){
       let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
-      let currentParams={
-        CountryCode: this.ruleForm.CountryCode,
-        MobileNumber: this.ruleForm.MobileNumber
-      }
-      let finalParams={ ...phoneParams, ...currentParams}
-      console.log("finalParams",finalParams)
-      this.handleGetPhoneCheck(finalParams).then(
+      phoneParams.CountryCode= this.ruleForm.CountryCode
+      phoneParams.MobileNumber= this.ruleForm.MobileNumber
+      this.handleGetRegisterOtp(phoneParams).then(
         res => {
-          this.resetTime= false
-          this.sendSms()
+          if(res.status == 200 && res.data && res.data.Success){
+            this.resetTime= false
+            this.onTimeChange()
+          }else if(res.data){
+            this.$message.error(res.data.ErrorMessage)
+          }else{
+            this.$message.error('Something is wrong')
+          }
         },
         res => {
-          this.$message.error('Hmm.. This number is already registered.');
+          console.log("err",res)
         }
       );
-    },
-    sendSms: function(){
-      console.log(1)
-      this.onTimeChange()
-      // this.registerSendMsg({mobile: this.ruleForm.MobileNumber}).then(res=>{
-      //     if(res.code !== -1){
-      //     }else{
-      //       this.resetTime = true
-      //     }
-      // })
     },
     /**定时器 */
     onTimeChange(){
@@ -169,13 +172,14 @@ export default {
         }
         console.log(2)
       },1000)
-  },
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if(!ruler.mobile.test(this.ruleForm.MobileNumber)){
             this.$message.error('Something’s wrong with your number');
           }else{
+            this.btnDisabled= false
             this.handleSubmit()
           }
         } else {
@@ -186,6 +190,7 @@ export default {
     },
     handleSubmit(){
       sessionStorage.setItem('registerInfo',JSON.stringify(this.ruleForm))
+      this.resetTime= true
       this.$router.push('/setPwd')
     },
     resetForm(formName) {

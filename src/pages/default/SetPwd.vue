@@ -21,7 +21,7 @@
             </el-checkbox>
           </el-form-item>
           <el-form-item>
-            <el-button round style="width:100%" type="primary" @click="submitForm('ruleForm')">Sing Up</el-button>
+            <el-button :disabled="btnDisabled" :loading="btnLoading" round style="width:100%" type="primary" @click="submitForm('ruleForm')">Sing Up</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -56,8 +56,14 @@ export default {
         checkPass: [
           { required: true, message: '', trigger: 'blur' }
         ],
-      }
+      },
+      btnLoading: false,
+      btnDisabled: false
     };
+  },
+  mounted(){
+    this.btnLoading= false
+    this.btnDisabled= false
   },
   methods: {
     ...mapActions(["handleSetPassword","handleRegister"]),
@@ -69,6 +75,7 @@ export default {
           }else if(this.ruleForm.pass !== this.ruleForm.checkPass) {
             this.$message.error('Password mismatch, please verify again')
           }else{
+            this.btnLoading= true
             this.handleSubmit()
           }
         } else {
@@ -85,8 +92,9 @@ export default {
       console.log("finalParams",finalParams)
       this.handleRegister(finalParams).then(
         res => {
+          this.btnLoading= false
           if(res.status == 200 && res.data && res.data.Success){
-            this.$router.push('/updateInfo')
+            // this.$router.push('/updateInfo')
           }else if(res.data){
             this.$message.error(res.data.ErrorMessage)
           }else{

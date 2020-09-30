@@ -11,6 +11,9 @@ export default{
     },
     ['COMMON_COUNTRY_SELECT'](state, data){
       state.contrySelect = data
-  },
+    },
+    ['UPDATE_USER_RESULT'](state, data){
+      state.updateResult = data
+    }
 }
 

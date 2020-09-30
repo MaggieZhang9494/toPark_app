@@ -137,6 +137,7 @@ function addContentType(url) {
 function setFormData(data){
   let formData = new FormData()
   Object.keys(data).map(key=>{
+    console.log("data[key]",data[key])
     if(Array.isArray(data[key])){
       data[key].map((item, index)=>{
         if(typeof item == 'object'){
@@ -153,6 +154,7 @@ function setFormData(data){
       formData.append(key, data[key])
     }
   })
+  console.log("finalformData",formData)
   return formData
 }
 export default request
