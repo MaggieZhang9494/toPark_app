@@ -13,11 +13,11 @@
                 <el-input v-model="ruleForm.Otp" autocomplete="off"></el-input>
               </el-form-item></el-col>
             <el-col :span="12">
-              <div class="timeCall">after {{time}} seconds</div>
+              <div class="timeCall">after {{send.times}} seconds</div>
             </el-col>
           </el-row>
-          <el-form-item label="New Password" prop="newPwd">
-            <el-input type="password" v-model="ruleForm.newPwd" autocomplete="off"
+          <el-form-item label="New Password" prop="NewPassword">
+            <el-input type="password" v-model="ruleForm.NewPassword" autocomplete="off"
             show-password></el-input>
           </el-form-item>
           <el-form-item label="Confirm New Password" prop="confirmPwd">
@@ -25,7 +25,7 @@
             show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button style="width:100%" round type="primary" @click="submitForm('ruleForm')">Next step</el-button>
+            <el-button :disabled="btnDisabled" :loading="btnLoading" style="width:100%" round type="primary" @click="submitForm('ruleForm')">Next step</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -49,13 +49,11 @@ export default {
       time: 59,
       ruleForm: {
         Otp: '',
-        newPwd: '',
+        NewPassword: '',
         confirmPwd: '',
-        MobileNumber:'',
-        CountryCode:''
       },
       rules: {
-        newPwd: [
+        NewPassword: [
           { required: true, message: '', trigger: 'blur' },
         ],
         confirmPwd: [
@@ -70,26 +68,50 @@ export default {
         times: 59,
       },
       resetTime:false,
+      btnLoading: false,
+      btnDisabled: true
     };
   },
+  computed: {
+    newConfirmPwd() {
+      return this.ruleForm.confirmPwd;
+    }
+  },
+  watch: {
+    newConfirmPwd(val) {
+      if(val){
+        this.btnDisabled= false
+      }else{
+        this.btnDisabled= true
+      }
+    }
+  },
   mounted() {
-    let resetInfo= JSON.parse(sessionStorage.getItem('ResetInfo'))
-    this.ruleForm.MobileNumber= resetInfo.MobileNumber
-    this.ruleForm.CountryCode= resetInfo.CountryCode
-    this.resetTime= false
+    this.btnDisabled= true
     this.sendSms()
   },
   methods: {
-    ...mapActions(["handleModifyPassword"]),
+    ...mapActions(["handleGetResetOtp","handleResetPasswordSms"]),
     sendSms: function(){
-      console.log(1)
-      this.onTimeChange()
-      // this.registerSendMsg({mobile: this.ruleForm.MobileNumber}).then(res=>{
-      //     if(res.code !== -1){
-      //     }else{
-      //       this.resetTime = true
-      //     }
-      // })
+      let resetInfo= JSON.parse(sessionStorage.getItem('ResetInfo'))
+      let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
+      let finalParams={ ...phoneParams,  ...resetInfo }
+      this.handleGetResetOtp(finalParams).then(
+        res => {
+          if(res.status == 200 && res.data && res.data.Success){
+            this.$message.success('Otp has been sent successfully')
+            this.resetTime= false
+            this.onTimeChange()
+          }else if(res.data){
+            this.$message.error(res.data.ErrorMessage)
+          }else{
+            this.$message.error('Something is wrong')
+          }
+        },
+        res => {
+          console.log("err",res)
+        }
+      );
     },
     /**定时器 */
     onTimeChange(){
@@ -99,8 +121,6 @@ export default {
           times: times,
       }
       let timer = setInterval(()=>{
-        console.log("times",times)
-        console.log("this.resetTime",this.resetTime)
         if(times<=0 || this.resetTime){
           clearInterval(timer)
           this.send={
@@ -119,36 +139,44 @@ export default {
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
+        console.log("valid",valid)
         if (valid) {
-          if(this.ruleForm.newPwd < 6 || this.ruleForm.confirmPwd < 6){
+          if(this.ruleForm.NewPassword.length < 6 || this.ruleForm.confirmPwd.length < 6){
             this.$message.error('Password must be at least 6 digits')
-          }else if(this.ruleForm.newPwd !== this.ruleForm.confirmPwd) {
+          }else if(this.ruleForm.NewPassword !== this.ruleForm.confirmPwd) {
             this.$message.error('Password mismatch, please verify again')
           }else{
+            this.btnDisabled= false
             this.handleSubmit()
           }
         } else {
-          console.log('error submit!!');
-            this.$message.error('错了哦，这是一条错误消息');
-            return false;
+          this.$message.error('error submit!!');
+          return false;
         }
       });
     },
     handleSubmit(){
+      console.log("111")
       let phoneParams= JSON.parse(sessionStorage.getItem('phoneParams'))
-      let ruleParams=this.ruleForm
-      let finalParams={ ...phoneParams, ...ruleParams}
+      let resetInfo= JSON.parse(sessionStorage.getItem('ResetInfo'))
+      let currentForm={
+        Password: this.ruleForm.confirmPwd,
+        Otp: this.ruleForm.Otp
+      }
+      let finalParams={ ...phoneParams, ...currentForm, ...resetInfo }
       console.log("finalParams",finalParams)
-      this.handleModifyPassword(finalParams).then(
+      this.handleResetPasswordSms(finalParams).then(
         res => {
           if(res.status == 200 && res.data && res.data.Success){
+            this.$message.success('Password changed successfully, please log in')
+            this.resetTime= true
+            sessionStorage.removeItem('ResetInfo')
             this.$router.push('/login')
           }else if(res.data){
             this.$message.error(res.data.ErrorMessage)
           }else{
             this.$message.error('Something is wrong')
           }
-          // this.$router.push('/updateInfo')
         },
         res => {
           console.log("err",res)

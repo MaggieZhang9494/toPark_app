@@ -21,12 +21,12 @@
             <el-input type="password" v-model="ruleForm.Password" autocomplete="off" show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button style="width:100%" round type="primary" @click="submitForm('ruleForm')">Next step</el-button>
+            <el-button :disabled="btnDisabled" style="width:100%" round type="primary" @click="submitForm('ruleForm')">Next step</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-card>
-    <div style="text-align:center" @click="toReset">Forgot your password?</div>
+    <div style="text-align:center;" @click="toReset">Forgot your password?</div>
   </div>
 </template>
 
@@ -57,10 +57,26 @@ export default {
         Password: [
           { required: true, message: '', trigger: 'blur' },
         ]
-      }
+      },
+      btnDisabled: true
     };
   },
+  computed: {
+    newPassword() {
+      return this.ruleForm.Password;
+    }
+  },
+  watch: {
+    newPassword(val) {
+      if(val){
+        this.btnDisabled= false
+      }else{
+        this.btnDisabled= true
+      }
+    }
+  },
   mounted(){
+    this.btnDisabled= true
     this.getCodeSelect()
   },
   methods: {
@@ -135,7 +151,7 @@ export default {
       this.$router.push('/login')
     },
     toRegister() {
-      this.$router.push('/login')
+      this.$router.push('/register')
     },
     toReset() {
       this.$router.push('/resetGetPhone')

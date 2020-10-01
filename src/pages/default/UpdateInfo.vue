@@ -210,7 +210,7 @@ export default {
           res => {
             console.log("success",res)
             if(res.status == 200 && res.data && res.data.Success){
-              this.$router.push('/registerResult')
+              this.$router.push('/scanCode')
             }else if(res.data){
               this.$message.error(res.data.ErrorMessage)
             }else{

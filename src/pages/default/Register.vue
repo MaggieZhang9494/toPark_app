@@ -134,6 +134,7 @@ export default {
       this.handleGetRegisterOtp(phoneParams).then(
         res => {
           if(res.status == 200 && res.data && res.data.Success){
+            this.$message.success('Otp has been sent successfully')
             this.resetTime= false
             this.onTimeChange()
           }else if(res.data){
@@ -189,9 +190,14 @@ export default {
       });
     },
     handleSubmit(){
-      sessionStorage.setItem('registerInfo',JSON.stringify(this.ruleForm))
-      this.resetTime= true
-      this.$router.push('/setPwd')
+      if(!this.ruleForm.CountryCode){
+        this.$message.error('Something’s wrong with countryCode');
+        return false
+      }else{
+        sessionStorage.setItem('registerInfo',JSON.stringify(this.ruleForm))
+        this.resetTime= true
+        this.$router.push('/setPwd')
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -239,7 +245,7 @@ export default {
           background-color: #E9EDEF;
           height: 28px;
           border: none;
-          border-right: 1px solid #8A8F98;
+          border-right: 1px solid rgba(138,143,152,0.17);
           border-radius: 0;
         }
         // .el-input__icon{

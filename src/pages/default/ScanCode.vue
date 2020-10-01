@@ -40,7 +40,6 @@ export default {
     }
   },
   mounted(){
-    // this.getDetail()
   },
   methods: {
     ...mapActions(["handleLogin"]),

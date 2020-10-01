@@ -55,24 +55,24 @@ export default new Router({
 			component: UpdateInfo,
 			meta: {index: 6}
     },
-    {
-			path: '/scanCode',
-			name: 'ScanCode',
-			component: ScanCode,
-			meta: {index: 7}
-    },
 		{
 			path: '/resetGetPhone',
 			name: 'ResetGetPhone',
 			component: ResetGetPhone,
-			meta: {index: 6}
+			meta: {index: 7}
 		},
 		{
 			path: '/resetPwd',
 			name: 'ResetPwd',
 			component: ResetPwd,
-			meta: {index: 6}
+			meta: {index: 8}
 		},
+    {
+			path: '/scanCode',
+			name: 'ScanCode',
+			component: ScanCode,
+			meta: {index: 9}
+    },
     {
 			path: '/gateTips',
 			name: 'GateTips',

@@ -94,7 +94,7 @@ export default {
         res => {
           this.btnLoading= false
           if(res.status == 200 && res.data && res.data.Success){
-            // this.$router.push('/updateInfo')
+            this.$router.push('/registerResult')
           }else if(res.data){
             this.$message.error(res.data.ErrorMessage)
           }else{

@@ -25,10 +25,10 @@
         <div class="firstTips">Complete</div>
         <div class="firstTips">registration</div>
         <div class="secondTips">Almost there… simply click on Quick Access to scan QR code for access (expire in 10mins) or download ToPark app for a truly contactless entry.</div>
-        <div><el-link class="thirdTips" @click="download">Download "ToPark"</el-link></div>
+        <div><el-link class="thirdTips" @click="toDownload">Download "ToPark"</el-link></div>
         <el-button round type="primary" @click="toLogin">Quick Access</el-button>
       </el-card>
-      <el-link class="downLink" @click="download">www.topark.io</el-link>
+      <el-link class="downLink" @click="toDownload">www.topark.io</el-link>
     </div>
     <div class="errorWrap" v-show="!isSuccess">
       <el-link 
@@ -42,7 +42,7 @@
         <img src="../../assets/top_icon.png"/>
         <div class="firstTips">Quick Access has timed out.</div>
         <div class="secondTips">Download ToPark App for a truly contactless entry.</div>
-        <el-button round type="primary" @click="download">Download App</el-button>
+        <el-button round type="primary" @click="toDownload">Download App</el-button>
       </el-card>
     </div>
   </div>
@@ -76,6 +76,9 @@ export default {
     },
     download() {
       alert(1)
+    },
+    toDownload(){
+      window.location.href="https://topark.alicloud.group/download/install.html"
     },
     start() {
       this.$refs.countDown.start();
